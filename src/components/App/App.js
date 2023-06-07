@@ -1,6 +1,7 @@
+// app
 
-import AboutProject from '../AboutProject/AboutProject';
 import Login from '../Login/Login';
+import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
 import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
@@ -9,7 +10,6 @@ import './App.css';
 
 import { Route, Routes } from 'react-router-dom';
 
-
 function App() {
   return (
     <div className="page">
@@ -17,7 +17,7 @@ function App() {
 
       {/* routes */}
       <Routes>
-        <Route path='/' element={<AboutProject />} />
+        <Route path='/' element={<Main />} />
         <Route path='/movies' element={<Movies />} />
         <Route path='/saved-movies' element={<SavedMovies />} />
         <Route path='/profile' element={<Profile />} />

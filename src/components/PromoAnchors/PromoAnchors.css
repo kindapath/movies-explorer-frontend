@@ -1,0 +1,42 @@
+.promo__anchors {
+
+}
+
+.promo__list {
+  display: flex;
+
+  gap: 0 10px;
+
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.promo__list-item {
+  display: block;
+
+  padding: 10px 17px;
+
+  background-color: #303030;
+
+  border-radius: 10px;
+
+  opacity: 1;
+  transition: opacity .3s ease-in-out;
+}
+
+.promo__list-item:hover {
+  opacity: .7;
+}
+
+.promo__link {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+
+  color: inherit;
+
+  text-decoration: none;
+}
+
+

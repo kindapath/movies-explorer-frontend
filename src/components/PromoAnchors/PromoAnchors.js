@@ -1,4 +1,5 @@
 // компонент с вёрсткой баннера страницы «О проекте».
+import { Link } from 'react-router-dom';
 import './PromoAnchors.css';
 
 const PromoAnchors = () => {
@@ -6,16 +7,16 @@ const PromoAnchors = () => {
     <nav className='promo__anchors'>
       <ul className='promo__list'>
 
-        <li className='promo__list-item'>
-          <a className='promo__link' href="#about-project">О проекте</a>
+        <li className='link promo__list-item'>
+          <Link className='promo__link' to="#about-project">О проекте</Link>
         </li>
 
-        <li className='promo__list-item'>
-          <a className='promo__link' href="#techs">Технологии</a>
+        <li className='link promo__list-item'>
+          <Link className='promo__link' to="#techs">Технологии</Link>
         </li>
 
-        <li className='promo__list-item'>
-          <a className='promo__link' href="#student">Студент</a>
+        <li className='link promo__list-item'>
+          <Link className='promo__link' to="#student">Студент</Link>
         </li>
 
       </ul>

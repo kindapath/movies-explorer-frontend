@@ -15,3 +15,13 @@
 
     color: #FFFFFF;
 }
+
+.link {
+  opacity: 1;
+  transition: opacity .3s ease-in-out;
+}
+
+.link:hover {
+  cursor: pointer;
+  opacity: .7;
+}

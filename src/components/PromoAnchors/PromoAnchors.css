@@ -20,13 +20,6 @@
   background-color: #303030;
 
   border-radius: 10px;
-
-  opacity: 1;
-  transition: opacity .3s ease-in-out;
-}
-
-.promo__list-item:hover {
-  opacity: .7;
 }
 
 .promo__link {

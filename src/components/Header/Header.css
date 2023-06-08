@@ -1,0 +1,69 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 18px 70px;
+}
+
+.header__pages {
+  display: flex;
+
+  gap: 0 16px;
+}
+
+.header__page-link {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+
+
+  text-decoration: none;
+  color: inherit;
+}
+
+.header__page-link_active {
+  font-weight: 500;
+}
+
+.header__auth {
+  display: flex;
+
+  align-items: center;
+
+  gap: 0 30px;
+}
+
+.header__register {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+
+  text-decoration: none;
+  color: inherit;
+}
+
+.header__login {
+  display: flex;
+
+  background-color: #3DDC84;
+
+  padding: 8px 20px;
+
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+
+  text-decoration: none;
+  color: #000000;
+
+  border-radius: 3px;
+}
+
+.logo {
+  color: #3DDC84;
+}

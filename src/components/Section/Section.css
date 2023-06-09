@@ -1,0 +1,29 @@
+.section {
+  display: flex;
+  flex-direction: column;
+
+  box-sizing: border-box;
+
+  /* TODO: move paddings to main__section_smth ? */
+  padding-left: 70px;
+  padding-right: 70px;
+
+  width: 100%;
+}
+
+.section_about-prj {
+  padding-top: 110px;
+  padding-bottom: 110px;
+}
+
+.section_about-me {
+  padding-top: 110px;
+  padding-bottom: 125px;
+}
+
+.section_techs {
+  padding-bottom: 100px;
+  padding-top: 100px;
+
+  background-color: #272727;
+}

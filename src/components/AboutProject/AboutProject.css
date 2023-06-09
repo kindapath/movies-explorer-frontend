@@ -1,0 +1,71 @@
+.about-prj__description {
+  margin-top: 70px;
+  margin-bottom: 110px;
+
+  display: flex;
+
+  gap: 0 40px;
+}
+
+.about-prj__item {
+  flex-basis: 1;
+}
+
+.about-prj__item-heading {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -0.04em;
+
+  margin-bottom: 26px;
+}
+
+.about-prj__text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+
+  margin: 0;
+}
+
+.about-prj__bar {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+}
+
+.about-prj__bar-column {
+  width: 100%;
+}
+
+.about-prj__bar-box {
+  display: flex;
+  justify-content: center;
+
+  padding: 9px 14px;
+
+  min-height: 36px;
+
+  box-sizing: border-box;
+}
+
+.about-prj__bar-box_color_green {
+  background-color: #3DDC84;
+}
+
+.about-prj__bar-box_color_gray {
+  background-color: #303030;
+}
+
+.about-prj__text-bar {
+  margin: 0;
+}
+
+.about-prj__text-bar_color_black {
+  color: #000;
+}
+
+.about-prj__text-bar_color_gray {
+  margin-top: 5px;
+  font-weight: 500;
+  color: #8B8B8B;
+}

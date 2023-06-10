@@ -1,11 +1,11 @@
 // компонент с использованными технологиями.
-import Section from '../Section/Section';
+
 import SectionTitle from '../SectionTitle/SectionTitle';
 import './Techs.css';
 
 const Techs = () => {
   return (
-    <Section className="techs" modifier={'section_techs'}>
+    <section className="techs main__techs" id="techs">
       <SectionTitle title="Технологии" />
 
       <h2 className='techs__heading'>7 технологий</h2>
@@ -43,7 +43,7 @@ const Techs = () => {
 
       </ul>
 
-    </Section>
+    </section>
   )
 }
 

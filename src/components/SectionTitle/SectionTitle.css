@@ -1,3 +1,7 @@
+.section-title {
+  width: 100%;
+}
+
 .section-title__heading {
   font-weight: 400;
   font-size: 22px;
@@ -5,10 +9,14 @@
   letter-spacing: -0.04em;
 
   margin-top: 0;
-  margin-bottom: 23px;
+  margin-bottom: 20px;
+
+  width: 100%;
 }
 
 .section-title__line {
+  box-sizing: border-box;
+
   margin: 0;
 
   width: 100%;

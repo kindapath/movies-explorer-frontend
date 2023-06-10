@@ -1,9 +1,9 @@
 // компонент с описанием дипломного проекта
 import './Section.css';
 
-const Section = ({ modifier, children }) => {
+const Section = ({ addClass, children }) => {
   return (
-    <section className={`section ${modifier}`}>
+    <section className={`section ${addClass}`}>
       {children}
     </section>
   )

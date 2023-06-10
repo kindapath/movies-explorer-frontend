@@ -5,9 +5,9 @@ import './AboutProject.css';
 
 const AboutProject = () => {
   return (
-    <Section className="about-prj" modifier={'section_about-prj'}>
+    <section className="about-prj main__about-prj">
       <SectionTitle title="О проекте" />
-      <div className='about-prj__description'>
+      <div className='about-prj__description' id="about-project">
 
         <div className='about-prj__item'>
           <h3 className='about-prj__item-heading'>Дипломный проект включал 5 этапов</h3>
@@ -48,7 +48,7 @@ const AboutProject = () => {
 
       </div>
 
-    </Section>
+    </section>
   )
 }
 

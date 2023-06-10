@@ -1,6 +1,7 @@
 // компонент страницы «О проекте». Он будет содержать только презентационные компоненты и в будущем, за исключением шапки навигации.
 import AboutMe from '../AboutMe/AboutMe';
 import AboutProject from '../AboutProject/AboutProject';
+import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import Promo from '../Promo/Promo';
 import Techs from '../Techs/Techs';
@@ -14,6 +15,7 @@ const Main = () => {
       <AboutProject />
       <Techs />
       <AboutMe />
+      <Footer />
     </div>
   )
 }

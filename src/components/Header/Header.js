@@ -11,10 +11,10 @@ const Header = () => {
       </Link>
 
 
-      <div className='header__pages'>
+      {/* <div className='header__pages'>
         <Link className='link header__page-link header__page-link_active' to="/movies">Фильмы</Link>
         <Link className='link header__page-link' to="/saved-movies">Сохраненные фильмы</Link>
-      </div>
+      </div> */}
 
       <div className='header__auth'>
         <Link className='link header__register' to="/signup">Регистрация</Link>

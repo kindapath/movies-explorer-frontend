@@ -22,6 +22,7 @@ const Header = ({ isLoggedIn }) => {
           </>
 
           :
+
           <div className='header__auth'>
             <Link className='link header__register' to="/signup">Регистрация</Link>
             <Link className='link header__login' to="/signin">Войти</Link>

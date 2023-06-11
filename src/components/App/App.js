@@ -1,5 +1,6 @@
 // app
 
+import { useState } from 'react';
 import Login from '../Login/Login';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
@@ -11,14 +12,19 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  const handleLogin = () => {
+    setIsLoggedIn(!isLoggedIn)
+  }
+
   return (
     <div className="page">
-
 
       {/* routes */}
       <Routes>
         <Route path='/' element={<Main />} />
-        <Route path='/movies' element={<Movies />} />
+        <Route path='/movies' element={<Movies isLoggedIn={isLoggedIn} handleLogin={handleLogin} />} />
         <Route path='/saved-movies' element={<SavedMovies />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/signin' element={<Login />} />

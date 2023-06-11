@@ -4,7 +4,7 @@ import './Footer.css';
 
 const Footer = () => {
   return (
-    <footer className='footer main__footer'>
+    <footer className='footer'>
 
       <p className='footer__study'>
         Учебный проект Яндекс.Практикум х BeatFilm.

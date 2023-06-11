@@ -9,14 +9,14 @@ import './Main.css';
 
 const Main = () => {
   return (
-    <div className='main'>
+    <main className='main'>
       <Header />
       <Promo />
       <AboutProject />
       <Techs />
       <AboutMe />
       <Footer />
-    </div>
+    </main>
   )
 }
 

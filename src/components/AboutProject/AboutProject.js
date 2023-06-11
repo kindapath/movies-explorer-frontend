@@ -1,5 +1,5 @@
 // компонент с описанием дипломного проекта
-import Section from '../Section/Section';
+
 import SectionTitle from '../SectionTitle/SectionTitle';
 import './AboutProject.css';
 

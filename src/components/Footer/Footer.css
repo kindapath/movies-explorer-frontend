@@ -5,6 +5,8 @@
   width: 100%;
 
   box-sizing: border-box;
+
+  padding: 0 70px;
 }
 
 .footer__study {
@@ -55,7 +57,17 @@
   color: inherit;
 }
 
+@media screen and (max-width: 1024px) {
+  .footer {
+    padding: 0 30px;
+  }
+}
+
 @media screen and (max-width: 544px) {
+  .footer {
+    padding: 0 10px;
+  }
+
   .footer__study {
     margin-top: 80px;
 

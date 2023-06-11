@@ -1,10 +1,9 @@
 // компонент с информацией о студенте.
 import { Link } from 'react-router-dom';
-import Section from '../Section/Section';
 import SectionTitle from '../SectionTitle/SectionTitle';
-import arrow from '../../images/arrow.svg'
 import myPhoto from '../../images/myPhoto.jpg'
 import './AboutMe.css';
+import Portfolio from '../Portfolio/Portfolio';
 
 const AboutMe = () => {
   return (
@@ -32,36 +31,8 @@ const AboutMe = () => {
       </article>
 
 
+      <Portfolio />
 
-      <h3 className='about-me__portfolio'>Портфолио</h3>
-
-      <ul className='about-me__list'>
-
-        <li className='about-me__item'>
-          <Link className='about-me__link link' to="https://github.com/kindapath/how-to-learn" target='_blank'>
-            <p className='about-me__link-text'>Статичный сайт</p>
-
-            <div className='about-me__icon' alt='arrow'></div>
-          </Link>
-        </li>
-
-        <li className='about-me__item'>
-          <Link className='about-me__link link' to='https://kindapath.github.io/russian-travel/' target='_blank'>
-            <p className='about-me__link-text'>Адаптивный сайт</p>
-
-            <div className='about-me__icon' alt='arrow'></div>
-          </Link>
-        </li>
-
-        <li className='about-me__item'>
-          <Link className='about-me__link link' to="https://kindaboii.nomoredomains.monster/" target='_blank'>
-            <p className='about-me__link-text'>Одностраничное приложение</p>
-
-            <div className='about-me__icon' alt='arrow'></div>
-          </Link>
-        </li>
-
-      </ul>
 
     </section>
   )

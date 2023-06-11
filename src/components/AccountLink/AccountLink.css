@@ -1,0 +1,37 @@
+.account {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  width: 100px;
+  height: 32px;
+
+  border: 2px #aaaaaa solid;
+  border-radius: 50px;
+
+  text-decoration: none;
+}
+
+.account__text {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+
+  color: #fff;
+
+  margin: 0;
+}
+
+.account__icon {
+  width: 12px;
+  height: 14px;
+
+  margin-right: 7px;
+}
+
+@media screen and (max-width: 1024px) {
+  .account {
+    display: none;
+  }
+}

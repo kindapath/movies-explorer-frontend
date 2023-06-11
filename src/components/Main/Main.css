@@ -29,10 +29,6 @@
   padding-right: 70px;
 }
 
-.main__footer {
-  padding: 0 70px;
-}
-
 @media screen and (max-width: 1024px) {
   .main__about-prj {
     padding: 90px 50px;
@@ -49,10 +45,6 @@
   .main__promo {
     margin-right: 20px;
     margin-left: 20px;
-  }
-
-  .main__footer {
-    padding: 0 30px;
   }
 }
 @media screen and (max-width: 544px) {
@@ -72,9 +64,5 @@
 
   .main__about-me {
     padding: 70px 14px;
-  }
-
-  .main__footer {
-    padding: 0 10px;
   }
 }

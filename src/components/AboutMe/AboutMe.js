@@ -41,7 +41,7 @@ const AboutMe = () => {
           <Link className='about-me__link link' to="https://github.com/kindapath/how-to-learn" target='_blank'>
             <p className='about-me__link-text'>Статичный сайт</p>
 
-            <img className='about-me__icon' src={arrow} alt='arrow' />
+            <div className='about-me__icon' alt='arrow'></div>
           </Link>
         </li>
 
@@ -49,7 +49,7 @@ const AboutMe = () => {
           <Link className='about-me__link link' to='https://kindapath.github.io/russian-travel/' target='_blank'>
             <p className='about-me__link-text'>Адаптивный сайт</p>
 
-            <img src={arrow} alt='arrow' />
+            <div className='about-me__icon' alt='arrow'></div>
           </Link>
         </li>
 
@@ -57,7 +57,7 @@ const AboutMe = () => {
           <Link className='about-me__link link' to="https://kindaboii.nomoredomains.monster/" target='_blank'>
             <p className='about-me__link-text'>Одностраничное приложение</p>
 
-            <img src={arrow} alt='arrow' />
+            <div className='about-me__icon' alt='arrow'></div>
           </Link>
         </li>
 

@@ -2,12 +2,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-self: stretch;
 
   padding-top: 160px;
   padding-bottom: 30px;
 
-  max-width: 1200px;
-  width: 100%;
   border-radius: 10px;
 
   background-color: #272727;
@@ -26,10 +25,6 @@
 
   margin-top: 0;
   margin-bottom: 150px;
-}
-
-.main__promo {
-  margin-top: 20px;
 }
 
 .promo__list {
@@ -66,4 +61,46 @@
 
   width: 100%;
   height: 100%;
+}
+
+@media screen and (max-width: 1024px) {
+  .promo {
+    padding-top: 350px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .promo__heading {
+    font-size: 40px;
+    line-height: 52px;
+
+    margin-bottom: 314px;
+  }
+}
+
+@media screen and (max-width: 544px) {
+  .promo {
+    padding: 220px 0 17px;
+  }
+
+  .promo__heading {
+    font-size: 29px;
+    line-height: 37px;
+
+    margin-bottom: 212px;
+  }
+
+  .promo__list {
+    gap: 0 5px;
+  }
+
+  .promo__list-item {
+    width: 82px;
+    height: 26px;
+  }
+
+  .promo__link {
+    font-size: 10px;
+    line-height: 16px;
+  }
 }

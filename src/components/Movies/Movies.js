@@ -3,8 +3,15 @@ import { useEffect } from 'react';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import './Movies.css';
+import SearchForm from '../SearchForm/SearchForm';
+import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
+import MoviesCardList from '../MoviesCardList/MoviesCardList';
+import More from '../More/More';
+import Preloader from '../Preloader/Preloader';
 
 const Movies = ({ isLoggedIn, handleLogin }) => {
+
+  const isLoading = true
 
   // временная логика
   useEffect(() => {
@@ -12,8 +19,18 @@ const Movies = ({ isLoggedIn, handleLogin }) => {
   }, [])
 
   return (
-    <main>
+    <main className='movies'>
       <Header isLoggedIn={isLoggedIn} />
+      <SearchForm />
+      <FilterCheckbox />
+      {
+        isLoading ?
+          <Preloader />
+          :
+          <MoviesCardList />
+      }
+
+      <More />
       <Footer />
     </main>
 

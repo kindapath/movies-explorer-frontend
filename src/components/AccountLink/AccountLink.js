@@ -6,7 +6,7 @@ import accountIcon from '../../images/account.svg'
 
 function AccountLink(props) {
   return (
-    <Link className='account' to='/profile'>
+    <Link className='account link' to='/profile'>
       <img className='account__icon' src={accountIcon} alt="кнопка аккаунта" />
       <p className='account__text'>Аккаунт</p>
     </Link>

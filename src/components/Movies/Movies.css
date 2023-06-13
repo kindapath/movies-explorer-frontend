@@ -1,0 +1,47 @@
+.movies {
+  display: flex;
+  flex-direction: column;
+}
+
+.movies__search {
+  margin: 70px 70px 25px;
+}
+
+.movies__filter {
+  margin-left: 70px;
+}
+
+.movies__movies-list {
+  margin: 70px 70px 10px;
+}
+
+@media screen and (max-width: 1024px) {
+  .movies__search {
+    margin-left: 30px;
+    margin-right: 30px;
+  }
+  .movies__filter {
+    margin-left: 30px;
+  }
+
+  .movies__movies-list {
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (max-width: 544px) {
+  .movies__search {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  .movies__filter {
+    margin-left: 15px;
+  }
+
+  .movies__movies-list {
+    margin: 40px 10px 25px;
+  }
+}

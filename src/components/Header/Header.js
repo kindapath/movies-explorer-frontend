@@ -10,7 +10,7 @@ const Header = ({ isLoggedIn }) => {
 
   return (
     <header className='header'>
-      <Link className='link header__page-link header__page-link_active' to="/">
+      <Link className='link header__page-link' to="/">
         <img className="link logo" src={logo} alt="Logo" />
       </Link>
 

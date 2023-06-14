@@ -1,26 +1,36 @@
 // презентационный компонент, который отрисовывает подвал
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './Footer.css';
 
 const Footer = () => {
+  const location = useLocation()
   return (
-    <footer className='footer'>
+    <>
 
-      <p className='footer__study'>
-        Учебный проект Яндекс.Практикум х BeatFilm.
-      </p>
+      {
+        location.pathname !== '/profile' &&
 
-      <div className='footer__info'>
-        <p className='footer__year'>© {new Date().getFullYear()}</p>
+        <footer className='footer'>
 
-        <div className='footer__links'>
-          <Link className='footer__link link' to='https://practicum.yandex.ru/' target='_blank'>Яндекс.Практикум</Link>
-          <Link className='footer__link link' to='https://github.com/kindapath' target='_blank'>Github</Link>
-        </div>
+          <p className='footer__study'>
+            Учебный проект Яндекс.Практикум х BeatFilm.
+          </p>
 
-      </div>
+          <div className='footer__info'>
+            <p className='footer__year'>© {new Date().getFullYear()}</p>
 
-    </footer>
+            <div className='footer__links'>
+              <Link className='footer__link link' to='https://practicum.yandex.ru/' target='_blank'>Яндекс.Практикум</Link>
+              <Link className='footer__link link' to='https://github.com/kindapath' target='_blank'>Github</Link>
+            </div>
+
+          </div>
+
+        </footer>
+      }
+
+    </>
+
   )
 }
 

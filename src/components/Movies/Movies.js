@@ -9,9 +9,9 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import More from '../More/More';
 import Preloader from '../Preloader/Preloader';
 
-const Movies = ({ isLoggedIn, handleLogin }) => {
+const Movies = ({ handleLogin }) => {
 
-  const isLoading = true
+  const isLoading = false
 
   // временная логика
   useEffect(() => {
@@ -20,7 +20,6 @@ const Movies = ({ isLoggedIn, handleLogin }) => {
 
   return (
     <main className='movies'>
-      <Header isLoggedIn={isLoggedIn} />
       <SearchForm />
       <FilterCheckbox />
       {
@@ -31,7 +30,6 @@ const Movies = ({ isLoggedIn, handleLogin }) => {
       }
 
       <More />
-      <Footer />
     </main>
 
   )

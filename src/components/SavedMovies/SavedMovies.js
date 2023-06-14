@@ -16,11 +16,9 @@ const SavedMovies = ({ isLoggedIn, handleLogin }) => {
 
   return (
     <main className='movies'>
-      <Header isLoggedIn={isLoggedIn} />
       <SearchForm />
       <FilterCheckbox />
       <MoviesCardList />
-      <Footer />
     </main>
 
   )

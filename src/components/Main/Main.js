@@ -10,12 +10,10 @@ import './Main.css';
 const Main = () => {
   return (
     <main className='main'>
-      <Header />
       <Promo />
       <AboutProject />
       <Techs />
       <AboutMe />
-      <Footer />
     </main>
   )
 }

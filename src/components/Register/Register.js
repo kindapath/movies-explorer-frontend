@@ -1,37 +1,46 @@
 // компонент страницы регистрации
-import './Register.css';
-import logo from '../../images/logo.svg'
-import Form from '../Form/Form';
+import AuthPage from '../AuthPage/AuthPage';
 import Input from '../Input/Input';
-import { Link } from 'react-router-dom';
+import Form from '../Form/Form';
+import useValidation from '../../hooks/useValidation';
+
 
 
 const Register = () => {
+
   return (
-    <section className='register'>
-      <div className='register__container'>
-        <img className="logo" src={logo} alt="Логотип" />
+    <AuthPage
+      welcomeText='Добро пожаловать!'
+      questionText='Уже зарегистрированы?'
+      linkText='Войти'
+      linkTo='/signin'
+    >
 
-        <h1 className='register__hello'>Добро пожаловать!</h1>
+      <Form
+        name='register'
+        onSubmit={() => console.log('register')}
 
-        <Form>
-          <div className='form__inputs'>
-            <Input />
+        buttonText='Зарегистрироваться'
+      >
+        <Input
 
-            <Input />
+          label='Имя'
+          type="text"
+        />
 
-            <Input />
+        <Input
+          label='Email'
+          type="email"
+        />
 
+        <Input
+          label='Пароль'
+          type="password"
+        />
 
-          </div>
+      </Form>
 
-          <button className={`form__button`} disabled={false} type="submit">Зарегистрироваться</button>
-
-        </Form>
-        <p className='register__text'>Уже зарегистрированы? <Link className='register__link link' to={'/signin'}>Войти</Link></p>
-
-      </div>
-    </section>
+    </AuthPage>
   )
 }
 

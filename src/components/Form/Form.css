@@ -6,3 +6,50 @@
 
   justify-content: space-between;
 }
+
+.form__inputs {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+
+  margin-bottom: 70px;
+}
+
+.form__inputs_type_login {
+  margin-bottom: 160px;
+}
+
+.form__button {
+  display: flex;
+  justify-content: center;
+
+  width: 100%;
+
+  border: 0;
+  border-radius: 3px;
+
+  background-color: #4285f4;
+  color: inherit;
+
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+
+  padding: 15px;
+}
+
+@media screen and (max-width: 544px) {
+  .form {
+    height: 100%;
+  }
+
+  .form__inputs {
+    margin-bottom: 10px;
+  }
+
+  .form__button {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}

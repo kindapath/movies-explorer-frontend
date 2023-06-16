@@ -19,6 +19,7 @@ export default function useValidation() {
     setValues(values => ({ ...values, [name]: value }));
     setError(errors => ({ ...errors, [name]: error }));
   }
+
   function resetValidation(values = {}, error = {}) {
     setValues(values);
     setError(error)

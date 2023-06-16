@@ -1,11 +1,21 @@
 // компонент импута
 import './Input.css';
 
-const Input = ({ name, value, onChange, type, addclass, formValid, errorText, ...props }) => {
+const Input = ({
+  label,
+
+  name,
+  value,
+  onChange,
+  type,
+  addclass,
+  formValid,
+  errorText,
+  ...props }) => {
   return (
     <>
       <label className='form__label'>
-        Имя
+        {label}
         <input
           className={`form__input form__input_type_${name} ${addclass}`}
           name={name}
@@ -15,7 +25,7 @@ const Input = ({ name, value, onChange, type, addclass, formValid, errorText, ..
           onChange={onChange}
           {...props}
         />
-        <span className={`form__input-error ${formValid ? '' : 'popup__input-error_active'} title-input-error`}>Что-то пошло не так...</span>
+        <span className={`form__input-error ${formValid ? '' : 'form__input-error_active'}`}>Что-то пошло не так...</span>
       </label>
 
     </>

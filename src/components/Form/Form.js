@@ -1,9 +1,11 @@
 // компонент формы
 import './Form.css';
 
-const Form = () => {
+const Form = ({ name, children }) => {
   return (
-    <div>Form</div>
+    <form className={`form form_type_${name}`} name={name} noValidate>
+      {children}
+    </form>
   )
 }
 

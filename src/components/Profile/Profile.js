@@ -1,5 +1,4 @@
 // компонент страницы изменения профиля
-import { useEffect } from 'react';
 import './Profile.css';
 
 const Profile = () => {

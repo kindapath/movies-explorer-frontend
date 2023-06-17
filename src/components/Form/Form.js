@@ -4,6 +4,7 @@ import './Form.css';
 const Form = ({
   name,
   onSubmit,
+  formValid,
 
   buttonText,
 
@@ -17,7 +18,7 @@ const Form = ({
         {children}
       </div>
 
-      <button className={`form__button`} disabled={false} type="submit">{buttonText}</button>
+      <button className={`form__button ${formValid ? '' : 'form__button_disabled'}`} disabled={formValid ? '' : true} type="submit">{buttonText}</button>
 
     </form>
   )

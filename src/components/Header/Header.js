@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import AccountLink from '../AccountLink/AccountLink';
 import Navigation from '../Navigation/Navigation';
+import Menu from '../Menu/Menu';
 
 const Header = ({ isLoggedIn }) => {
 
@@ -19,6 +20,7 @@ const Header = ({ isLoggedIn }) => {
           <>
             <Navigation />
             <AccountLink />
+            <Menu />
           </>
 
           :

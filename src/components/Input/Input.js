@@ -3,21 +3,20 @@ import './Input.css';
 
 const Input = ({
   label,
-
   name,
   value,
   onChange,
   type,
-  addclass,
   formValid,
   errorText,
-  ...props }) => {
+  ...props
+}) => {
   return (
     <>
       <label className='form__label'>
         {label}
         <input
-          className={`form__input form__input_type_${name} ${addclass}`}
+          className={`form__input`}
           name={name}
           type={type}
           id={`${name}-input}`}
@@ -25,7 +24,7 @@ const Input = ({
           onChange={onChange}
           {...props}
         />
-        <span className={`form__input-error ${formValid ? '' : 'form__input-error_active'}`}>Что-то пошло не так...</span>
+        <span className={`form__input-error`}>{errorText}</span>
       </label>
 
     </>

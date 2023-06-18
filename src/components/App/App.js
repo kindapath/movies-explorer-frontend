@@ -12,33 +12,77 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import Layout from '../Layout/Layout';
 import NotFound from '../NotFound/NotFound';
+import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
+import { CurrentUser } from '../../contexts/CurrentUser';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+  const [currentUser, setCurrentUser] = useState({
+    name: 'Ника',
+    email: 'nikaisbeatiful@gmail.com'
+  })
 
   const handleLogin = () => {
     setIsLoggedIn(!isLoggedIn)
   }
 
+
   return (
-    <div className="page">
+    <CurrentUser.Provider value={currentUser}>
+      <div className="page">
 
-      {/* routes */}
-      <Routes>
+        {/* routes */}
+        <Routes>
 
-        <Route path="/" element={<Layout isLoggedIn={isLoggedIn} />}>
-          <Route path='/' element={<Main />} />
-          <Route path='movies' element={<Movies isLoggedIn={isLoggedIn} handleLogin={handleLogin} />} />
-          <Route path='saved-movies' element={<SavedMovies isLoggedIn={isLoggedIn} handleLogin={handleLogin} />} />
-          <Route path='/profile' element={<Profile />} />
-        </Route>
+          <Route
+            path="/"
+            element={<Layout isLoggedIn={isLoggedIn} />}>
 
-        <Route path='/signin' element={<Login />} />
-        <Route path='/signup' element={<Register />} />
+            <Route path='/'
+              element={<Main />} />
 
-        <Route path='*' element={<NotFound />} />
-      </Routes>
-    </div>
+            <Route
+              path='movies'
+              element={
+                <ProtectedRouteElement
+                  element={Movies}
+                  isLoggedIn={isLoggedIn}
+                  isLoading={isLoading}
+                />
+              }
+            />
+
+            <Route
+              path='saved-movies'
+              element={
+                <ProtectedRouteElement
+                  element={SavedMovies}
+                  isLoggedIn={isLoggedIn}
+                  isLoading={isLoading} />
+              }
+            />
+
+            <Route
+              path='profile'
+              element={
+                <ProtectedRouteElement
+                  element={Profile}
+                  isLoggedIn={isLoggedIn}
+                />
+              }
+            />
+
+          </Route>
+
+          <Route path='/signin' element={<Login />} />
+          <Route path='/signup' element={<Register />} />
+
+          <Route path='*' element={<NotFound />} />
+
+        </Routes>
+      </div>
+    </CurrentUser.Provider>
   );
 }
 

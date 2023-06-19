@@ -1,0 +1,147 @@
+.about-prj {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  box-sizing: border-box;
+
+  width: 100%;
+}
+
+.about-prj__description {
+  margin-top: 70px;
+  margin-bottom: 110px;
+
+  display: flex;
+
+  gap: 0 40px;
+}
+
+.about-prj__item {
+  max-width: 550px;
+}
+
+.about-prj__item-heading {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -0.04em;
+
+  margin-top: 0;
+  margin-bottom: 26px;
+}
+
+.about-prj__text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+
+  margin: 0;
+}
+
+.about-prj__bar {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+
+  width: 100%;
+}
+
+.about-prj__bar-column {
+  width: 100%;
+}
+
+.about-prj__bar-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 36px;
+
+  box-sizing: border-box;
+}
+
+.about-prj__bar-box_color_green {
+  background-color: #3ddc84;
+}
+
+.about-prj__bar-box_color_gray {
+  background-color: #303030;
+}
+
+.about-prj__text-bar {
+  margin: 0;
+}
+
+.about-prj__text-bar_color_black {
+  color: #000;
+}
+
+.about-prj__text-bar_color_gray {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #8b8b8b;
+}
+
+@media screen and (max-width: 1024px) {
+  .about-prj__description {
+    margin-bottom: 90px;
+    gap: 0 30px;
+  }
+
+  .about-prj__item {
+    max-width: 100%;
+  }
+
+  .about-prj__item-heading {
+    margin-bottom: 22px;
+  }
+
+  .about-prj__text {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .about-prj__bar {
+    grid-template-columns: minmax(140px, 1fr) 4fr;
+  }
+
+  .about-prj__text-bar {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+  }
+}
+
+@media screen and (max-width: 544px) {
+  .about-prj__description {
+    flex-direction: column;
+
+    margin-top: 60px;
+    margin-bottom: 60px;
+
+    gap: 56px 0;
+  }
+
+  .about-prj__item-heading {
+    font-size: 18px;
+    line-height: 22px;
+
+    margin-bottom: 16px;
+  }
+
+  .about-prj__text {
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .about-prj__bar {
+    grid-template-columns: minmax(100px, 1fr) 4fr;
+  }
+
+  .about-prj__text-bar {
+    font-size: 11px;
+    line-height: 13px;
+  }
+}

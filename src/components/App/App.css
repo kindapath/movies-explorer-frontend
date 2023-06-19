@@ -1,0 +1,37 @@
+#root {
+  background-color: #202020;
+}
+
+.page {
+  margin: 0 auto;
+  padding: 0;
+
+  max-width: 1280px;
+  min-height: 100vh;
+
+  font-family: "Inter", "Arial", "Helvetica", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+
+  color: #ffffff;
+}
+
+.link {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.link:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.button {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.button:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}

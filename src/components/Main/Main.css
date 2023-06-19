@@ -1,0 +1,68 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  box-sizing: border-box;
+}
+
+.main__promo {
+  margin-top: 20px;
+  margin-right: 40px;
+  margin-left: 40px;
+}
+
+.main__about-prj {
+  padding: 110px 70px;
+}
+
+.main__techs {
+  padding: 100px 70px;
+
+  background-color: #272727;
+}
+
+.main__about-me {
+  padding-top: 110px;
+  padding-bottom: 125px;
+  padding-left: 70px;
+  padding-right: 70px;
+}
+
+@media screen and (max-width: 1024px) {
+  .main__about-prj {
+    padding: 90px 50px;
+  }
+
+  .main__techs {
+    padding: 90px 50px;
+  }
+
+  .main__about-me {
+    padding: 90px 50px;
+  }
+
+  .main__promo {
+    margin-right: 20px;
+    margin-left: 20px;
+  }
+}
+@media screen and (max-width: 544px) {
+  .main__promo {
+    margin-top: 14px;
+    margin-right: 14px;
+    margin-left: 14px;
+  }
+
+  .main__about-prj {
+    padding: 70px 18px 55px;
+  }
+
+  .main__techs {
+    padding: 70px 18px;
+  }
+
+  .main__about-me {
+    padding: 70px 14px;
+  }
+}

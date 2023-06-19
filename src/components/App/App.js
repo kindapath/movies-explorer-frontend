@@ -9,22 +9,24 @@ import Register from '../Register/Register';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import './App.css';
 
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import Layout from '../Layout/Layout';
 import NotFound from '../NotFound/NotFound';
 import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
 import { CurrentUser } from '../../contexts/CurrentUser';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [currentUser, setCurrentUser] = useState({
     name: 'Ника',
     email: 'nikaisbeatiful@gmail.com'
   })
+  const navigate = useNavigate();
 
   const handleLogin = () => {
     setIsLoggedIn(!isLoggedIn)
+    navigate('/')
   }
 
 
@@ -75,7 +77,7 @@ function App() {
 
           </Route>
 
-          <Route path='/signin' element={<Login />} />
+          <Route path='/signin' element={<Login isLoggedIn={isLoggedIn} handleLogin={handleLogin} />} />
           <Route path='/signup' element={<Register />} />
 
           <Route path='*' element={<NotFound />} />

@@ -5,7 +5,7 @@ import Input from '../Input/Input';
 import Form from '../Form/Form';
 import useValidation from '../../hooks/useValidation';
 
-const Login = () => {
+const Login = ({ handleLogin }) => {
   const {
     values,
     error,
@@ -23,7 +23,7 @@ const Login = () => {
     >
       <Form
         name='login'
-        onSubmit={() => console.log('login')}
+        onSubmit={handleLogin}
         formValid={formValid}
 
         buttonText='Войти'

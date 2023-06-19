@@ -7,28 +7,16 @@ import AccountLink from '../AccountLink/AccountLink';
 import Navigation from '../Navigation/Navigation';
 import Menu from '../Menu/Menu';
 import MenuButton from '../MenuButton/MenuButton';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useMediaQuery } from 'react-responsive'
 
 const Header = ({ isLoggedIn, items }) => {
   const [menuActive, setMenuActive] = useState(false);
-  const [screenWidth, setScreenWidth] = useState(null);
+  const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' });
 
   const handleMenuClick = () => {
     setMenuActive(!menuActive);
   };
-
-  const handleScreenWidth = () => {
-    setScreenWidth(window.innerWidth)
-  }
-
-  useEffect(() => {
-    window.addEventListener('resize', handleScreenWidth);
-    console.log('size')
-
-    return (() => {
-      window.removeEventListener('resize', handleScreenWidth);
-    })
-  }, [screenWidth])
 
   return (
     <header className='header'>
@@ -41,7 +29,7 @@ const Header = ({ isLoggedIn, items }) => {
           <>
             <Navigation />
 
-            {screenWidth > 1024 && <AccountLink />}
+            {isBigScreen && <AccountLink />}
 
             <MenuButton
               menuActive={menuActive}

@@ -1,33 +1,45 @@
-import { useState } from "react";
 import "./Menu.css";
+import { Link } from "react-router-dom";
+import AccountLink from "../AccountLink/AccountLink";
 
-const Menu = ({ isLoggedIn }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const handleMenuClick = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+const Menu = ({ menuActive, handleMenuClick }) => {
+  const items = [
+    {
+      title: "Главная",
+      to: "/",
+    },
+    {
+      title: "Фильмы",
+      to: "/movies",
+    },
+    {
+      title: "Сохраненные фильмы",
+      to: "/saved-movies",
+    },
+  ];
 
   return (
-    <button onClick={handleMenuClick} className="menu">
-      <div className="menu__lines">
-        <span
-          className={`menu__line menu__line-1 ${
-            isMenuOpen ? "menu__line-1_open" : "menu__line-1_close"
-          }`}
-        ></span>
-        <span
-          className={`menu__line menu__line-2 ${
-            isMenuOpen ? "menu__line-2_open" : "menu__line-2_close"
-          }`}
-        ></span>
-        <span
-          className={`menu__line menu__line-3 ${
-            isMenuOpen ? "menu__line-3_open" : "menu__line-3_close"
-          }`}
-        ></span>
+    <div
+      className={menuActive ? "menu menu_active" : "menu"}
+      onClick={handleMenuClick}
+    >
+      <div
+        className={menuActive ? "menu__blur menu__blur_active" : "menu__blur"}
+      />
+
+      <div className="menu__content" onClick={(e) => e.stopPropagation()}>
+        <ul className="menu__list">
+          {items.map((item, index) => (
+            <li key={index}>
+              <Link className="menu__link" to={item.to}>
+                {item.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <AccountLink />
       </div>
-    </button>
+    </div>
   );
 };
 

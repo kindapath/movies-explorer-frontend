@@ -1,24 +1,23 @@
 // компонент одной карточки фильма
 import './MoviesCard.css';
-import cardImage from '../../images/cardImage.jpg'
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 
-const MoviesCard = ({ }) => {
+const MoviesCard = ({ image, name, duration }) => {
   //temporary solution
   const [isLiked, setIsLiked] = useState(false)
   const location = useLocation()
 
   return (
     <article className='card'>
-      <img className='card__image' src={cardImage} alt='Фото карточки' />
+      <img className='card__image' src={image} alt='Фото карточки' />
 
       <div className='card__row'>
 
         <div className='card__column'>
-          <h2 className='card__heading'>В погоне за Бенкси</h2>
-          <p className='card__time'>1ч 42м</p>
+          <h2 className='card__heading'>{name}</h2>
+          <p className='card__time'>{duration}</p>
         </div>
 
         <div className='card__column card__column_like'>

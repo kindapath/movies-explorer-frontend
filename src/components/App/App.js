@@ -8,12 +8,16 @@ import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import './App.css';
+import { moviesApi } from '../../utils/MoviesApi';
+
 
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Layout from '../Layout/Layout';
 import NotFound from '../NotFound/NotFound';
 import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
 import { CurrentUser } from '../../contexts/CurrentUser';
+import { Alert, AlertTitle } from '@mui/material';
+import Error from '../Error/Error';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -22,6 +26,10 @@ function App() {
     name: 'Ника',
     email: 'nikaisbeatiful@gmail.com'
   })
+  const [cards, setCards] = useState([])
+
+  const [isErrorShown, setIsErrorShown] = useState(true)
+
   const navigate = useNavigate();
 
   const handleLogin = () => {
@@ -29,10 +37,24 @@ function App() {
     navigate('/')
   }
 
+  function handleSearch() {
+    setIsLoading(true)
+    moviesApi.getMovies()
+      .then((movies) => {
+        // throw new Error()
+        setIsLoading(false)
+        setCards(movies)
+        localStorage.setItem("cards", movies)
+      })
+      .catch(() => { })
+  }
+
 
   return (
     <CurrentUser.Provider value={currentUser}>
       <div className="page">
+
+        <Error isOpen={isErrorShown} />
 
         {/* routes */}
         <Routes>
@@ -51,6 +73,8 @@ function App() {
                   element={Movies}
                   isLoggedIn={isLoggedIn}
                   isLoading={isLoading}
+                  handleSearch={handleSearch}
+                  cards={cards}
                 />
               }
             />

@@ -28,7 +28,8 @@ function App() {
   })
   const [cards, setCards] = useState([])
 
-  const [isErrorShown, setIsErrorShown] = useState(true)
+  const [isNotFoundError, setIsNotFoundError] = useState(false)
+  const [isError, setIsError] = useState(false)
 
   const navigate = useNavigate();
 
@@ -54,8 +55,6 @@ function App() {
     <CurrentUser.Provider value={currentUser}>
       <div className="page">
 
-        <Error isOpen={isErrorShown} />
-
         {/* routes */}
         <Routes>
 
@@ -75,6 +74,8 @@ function App() {
                   isLoading={isLoading}
                   handleSearch={handleSearch}
                   cards={cards}
+                  isNotFoundError={isNotFoundError}
+                  isError={isError}
                 />
               }
             />

@@ -9,3 +9,12 @@
 
   max-width: 100%;
 }
+
+.error_auth {
+  font-size: 14px;
+  line-height: 14px;
+
+  margin-top: 0;
+
+  color: #ee3465;
+}

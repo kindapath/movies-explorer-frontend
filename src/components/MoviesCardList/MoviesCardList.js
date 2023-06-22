@@ -12,7 +12,12 @@ const MoviesCardList = ({ cards }) => {
         {cards.map((movie) => {
           return (
             <li>
-              <MoviesCard image={`https://api.nomoreparties.co${movie.image.url}`} name={movie.nameRU} duration={movie.duration} />
+              <MoviesCard
+                image={`https://api.nomoreparties.co${movie.image.url}`}
+                name={movie.nameRU}
+                duration={movie.duration}
+                trailerLink={movie.trailerLink}
+              />
             </li>
           )
         })}

@@ -29,7 +29,10 @@ const Movies = ({
         );
       default:
         return (
-          <MoviesCardList cards={cards} />
+          <>
+            <MoviesCardList cards={cards} />
+            <More />
+          </>
         );
     }
   }
@@ -47,7 +50,6 @@ const Movies = ({
           renderSwitch()
       }
 
-      <More />
     </main>
 
   )

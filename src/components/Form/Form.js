@@ -1,4 +1,5 @@
 // компонент формы
+import Error from '../Error/Error';
 import './Form.css';
 
 const Form = ({
@@ -9,6 +10,7 @@ const Form = ({
   buttonText,
 
   children,
+  errorApi
 }) => {
 
   return (
@@ -17,7 +19,10 @@ const Form = ({
       <div className={`form__inputs form__inputs_type_${name}`}>
         {children}
       </div>
-
+      {
+        errorApi !== '' &&
+        <Error errorText={errorApi} addclass='error_auth' />
+      }
       <button className={`form__button ${formValid ? '' : 'form__button_disabled'}`} disabled={formValid ? '' : true} type="submit">{buttonText}</button>
 
     </form>

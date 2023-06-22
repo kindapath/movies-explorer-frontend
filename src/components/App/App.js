@@ -1,6 +1,6 @@
 // app
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Login from '../Login/Login';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
@@ -18,25 +18,35 @@ import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElemen
 import { CurrentUser } from '../../contexts/CurrentUser';
 import { Alert, AlertTitle } from '@mui/material';
 import Error from '../Error/Error';
+import { mainApi } from '../../utils/MainApi';
 
 function App() {
+  const navigate = useNavigate();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [currentUser, setCurrentUser] = useState({
-    name: 'Ника',
-    email: 'nikaisbeatiful@gmail.com'
-  })
+  const [currentUser, setCurrentUser] = useState({})
   const [cards, setCards] = useState([])
 
   const [isNotFoundError, setIsNotFoundError] = useState(false)
   const [isError, setIsError] = useState(false)
+  const [errorApi, setErrorApi] = useState('')
 
-  const navigate = useNavigate();
-
-  const handleLogin = () => {
-    setIsLoggedIn(!isLoggedIn)
-    navigate('/')
+  function checkToken() {
+    mainApi.getUserInfo()
+      .then((userData) => {
+        handleLogin(userData)
+      })
+      .catch((err) => {
+        navigate('/')
+        console.log(err.message)
+      })
   }
+
+
+  useEffect(() => {
+    checkToken()
+  }, [])
 
   function handleSearch() {
     setIsLoading(true)
@@ -50,6 +60,37 @@ function App() {
       .catch(() => { })
   }
 
+  // меняем стейт логина и переводим юзера на страницу фильмов
+  const handleLogin = (userData) => {
+    setIsLoggedIn(!isLoggedIn)
+    setCurrentUser({
+      name: userData.name, //TODO: исправить на бекенде - чтобы апи логина отдавал и name
+      email: userData.email
+    })
+    navigate('/movies')
+  }
+
+  // регистрация
+  function onRegister({ name, email, password }) {
+    mainApi.register({ name, email, password })
+      .then((userData) => {
+        handleLogin(userData)
+      })
+      .catch((err) => {
+        setErrorApi(err.message)
+      })
+  }
+
+  // аутентификация и авторизация
+  const onLogin = ({ email, password }) => {
+    mainApi.login({ email, password })
+      .then((userData) => {
+        handleLogin(userData)
+      })
+      .catch((err) => {
+        setErrorApi(err.message)
+      })
+  }
 
   return (
     <CurrentUser.Provider value={currentUser}>
@@ -102,8 +143,17 @@ function App() {
 
           </Route>
 
-          <Route path='/signin' element={<Login isLoggedIn={isLoggedIn} handleLogin={handleLogin} />} />
-          <Route path='/signup' element={<Register />} />
+          <Route path='/signin' element={
+            <Login
+              isLoggedIn={isLoggedIn}
+              onLogin={onLogin}
+              errorApi={errorApi}
+            />} />
+          <Route path='/signup' element={
+            <Register
+              onRegister={onRegister}
+              errorApi={errorApi}
+            />} />
 
           <Route path='*' element={<NotFound />} />
 

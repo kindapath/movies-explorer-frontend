@@ -10,7 +10,9 @@ const Form = ({
   buttonText,
 
   children,
-  errorApi
+  errorApi,
+
+  hiddenSubmit
 }) => {
 
   return (
@@ -23,7 +25,15 @@ const Form = ({
         errorApi !== '' &&
         <Error errorText={errorApi} addclass='error_auth' />
       }
-      <button className={`form__button ${formValid ? '' : 'form__button_disabled'}`} disabled={formValid ? '' : true} type="submit">{buttonText}</button>
+
+      {
+        hiddenSubmit
+          ?
+          ''
+          :
+          <button className={`form__button ${formValid ? '' : 'form__button_disabled'}`} disabled={formValid ? '' : true} type="submit">{buttonText}</button>
+
+      }
 
     </form>
   )

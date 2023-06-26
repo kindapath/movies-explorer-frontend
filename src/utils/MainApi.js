@@ -46,6 +46,30 @@ class MainApi {
       .then(this._checkResponse);
   };
 
+  logout() {
+    return fetch(`${this._baseUrl}/signout`, {
+      credentials: 'include',
+    })
+      .then(this._checkResponse);
+  }
+
+  editProfile({ email, name }) {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "name": name,
+        "email": email,
+      })
+    })
+      .then(this._checkResponse);
+  }
+
+
   getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
       method: 'GET',

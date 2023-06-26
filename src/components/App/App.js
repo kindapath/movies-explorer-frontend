@@ -27,6 +27,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
   const [cards, setCards] = useState([])
+  const [inputOn, setInputOn] = useState(false)
+  const [hiddenSubmit, setHiddenSubmit] = useState(true)
 
   const [isNotFoundError, setIsNotFoundError] = useState(false)
   const [isError, setIsError] = useState(false)
@@ -92,6 +94,33 @@ function App() {
       })
   }
 
+  const onLogout = () => {
+    mainApi.logout()
+      .then(() => {
+        navigate('/')
+        console.log('logout succesfully')
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }
+
+  const onEditProfile = ({ email, name }) => {
+    mainApi.editProfile({ email, name })
+      .then((userData) => {
+        console.log(userData)
+        setCurrentUser({
+          name: userData.name,
+          email: userData.email
+        })
+        setInputOn(false)
+        setHiddenSubmit(true)
+      })
+      .catch((err) => {
+        setErrorApi(err.message)
+      })
+  }
+
   return (
     <CurrentUser.Provider value={currentUser}>
       <div className="page">
@@ -137,6 +166,13 @@ function App() {
                 <ProtectedRouteElement
                   element={Profile}
                   isLoggedIn={isLoggedIn}
+                  errorApi={errorApi}
+                  onEditProfile={onEditProfile}
+                  inputOn={inputOn}
+                  hiddenSubmit={hiddenSubmit}
+                  setInputOn={setInputOn}
+                  setHiddenSubmit={setHiddenSubmit}
+                  onLogout={onLogout}
                 />
               }
             />

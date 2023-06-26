@@ -9,6 +9,8 @@
 
 .card__image {
   max-height: 203px;
+  min-height: 203px;
+  width: 100%;
   object-fit: cover;
   object-position: center;
 }
@@ -103,6 +105,7 @@
 @media screen and (max-width: 1024px) {
   .card__image {
     max-height: 190px;
+    min-height: 190px;
   }
   .card__heading {
     margin: 0 0 15px;
@@ -111,6 +114,7 @@
 @media screen and (max-width: 544px) {
   .card__image {
     max-height: 168px;
+    min-height: 168px;
   }
 
   .card__heading {

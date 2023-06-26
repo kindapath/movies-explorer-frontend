@@ -1,0 +1,20 @@
+.error {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 18px;
+
+  text-align: center;
+
+  margin: 30px;
+
+  max-width: 100%;
+}
+
+.error_auth {
+  font-size: 14px;
+  line-height: 14px;
+
+  margin-top: 0;
+
+  color: #ee3465;
+}

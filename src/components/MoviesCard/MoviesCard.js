@@ -1,24 +1,36 @@
 // компонент одной карточки фильма
 import './MoviesCard.css';
-import cardImage from '../../images/cardImage.jpg'
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 
-const MoviesCard = ({ }) => {
+const MoviesCard = ({ image, name, duration, trailerLink }) => {
   //temporary solution
   const [isLiked, setIsLiked] = useState(false)
   const location = useLocation()
 
+  function toHoursAndMinutes(totalMinutes) {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+
+    return `${hours} ч${minutes > 0 ? ` ${minutes} мин` : ''}`;
+  }
+
+  console.log();
+
   return (
     <article className='card'>
-      <img className='card__image' src={cardImage} alt='Фото карточки' />
+      <Link to={trailerLink} target='_blank'>
+        <img className='card__image' src={image} alt='Фото карточки' />
+      </Link>
+
 
       <div className='card__row'>
 
         <div className='card__column'>
-          <h2 className='card__heading'>В погоне за Бенкси</h2>
-          <p className='card__time'>1ч 42м</p>
+          <h2 className='card__heading'>{name}</h2>
+          <p className='card__time'>{toHoursAndMinutes(duration)}</p>
         </div>
 
         <div className='card__column card__column_like'>

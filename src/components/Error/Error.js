@@ -1,10 +1,10 @@
 // презентационный компонент, который отрисовывает подвал
 import './Error.css';
 
-const Error = () => {
-    return (
-        <div>Error</div>
-    )
+const Error = ({ errorTitle, errorText, addclass, isOpen }) => {
+  return (
+    <h2 className={`error ${addclass}`}>{errorText}</h2>
+  )
 }
 
 export default Error;

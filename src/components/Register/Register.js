@@ -3,17 +3,23 @@ import AuthPage from '../AuthPage/AuthPage';
 import Input from '../Input/Input';
 import Form from '../Form/Form';
 import useValidation from '../../hooks/useValidation';
+import { useFormWithValidation } from '../../hooks/useForm';
 
 
 
-const Register = () => {
+const Register = ({ onRegister, errorApi }) => {
 
   const {
     values,
     error,
     onChange,
-    formValid
-  } = useValidation();
+    formValid,
+  } = useFormWithValidation()
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    onRegister(values)
+  }
 
   return (
     <AuthPage
@@ -25,8 +31,9 @@ const Register = () => {
 
       <Form
         name='register'
-        onSubmit={() => console.log('register')}
+        onSubmit={handleSubmit}
         formValid={formValid}
+        errorApi={errorApi}
 
         buttonText='Зарегистрироваться'
       >

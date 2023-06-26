@@ -3,15 +3,20 @@ import AuthPage from '../AuthPage/AuthPage';
 import './Login.css';
 import Input from '../Input/Input';
 import Form from '../Form/Form';
-import useValidation from '../../hooks/useValidation';
+import { useFormWithValidation } from '../../hooks/useForm';
 
-const Login = ({ handleLogin }) => {
+const Login = ({ onLogin, errorApi }) => {
   const {
     values,
     error,
     onChange,
-    formValid
-  } = useValidation();
+    formValid,
+  } = useFormWithValidation()
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    onLogin(values)
+  }
 
   return (
     <AuthPage
@@ -23,8 +28,10 @@ const Login = ({ handleLogin }) => {
     >
       <Form
         name='login'
-        onSubmit={handleLogin}
+        onSubmit={handleSubmit}
         formValid={formValid}
+        errorApi={errorApi}
+
 
         buttonText='Войти'
       >

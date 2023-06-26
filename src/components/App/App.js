@@ -16,7 +16,6 @@ import Layout from '../Layout/Layout';
 import NotFound from '../NotFound/NotFound';
 import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
 import { CurrentUser } from '../../contexts/CurrentUser';
-import { Alert, AlertTitle } from '@mui/material';
 import Error from '../Error/Error';
 import { mainApi } from '../../utils/MainApi';
 

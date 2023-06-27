@@ -81,6 +81,10 @@ class MainApi {
     })
       .then(this._checkResponse);
   }
+
+  getLikedMovies() {
+
+  }
 }
 export const mainApi = new MainApi({
   baseUrl: 'https://api.zhenya.nomoredomains.rocks',

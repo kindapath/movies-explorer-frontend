@@ -33,6 +33,16 @@ function App() {
   const [isError, setIsError] = useState(false)
   const [errorApi, setErrorApi] = useState('')
 
+  const [likedMovies, setLikedMovies] = useState([])
+
+  function getLikedMovies() {
+    mainApi.getLikedMovies()
+      .then((likedMovies) => {
+        setLikedMovies([likedMovies])
+      })
+      .catch(err => console.log(err))
+  }
+
   function checkToken() {
     mainApi.getUserInfo()
       .then((userData) => {
@@ -120,6 +130,24 @@ function App() {
       })
   }
 
+  const onLike = (movie) => {
+    const isLiked = likedMovies.some((likedMovie) => likedMovie._id === movie._id);
+
+    if (isLiked) {
+      mainApi.dislikeCard(movie)
+        .then((res) => {
+          console.log(res, 'card is disliked');
+        })
+        .catch(err => console.log(err))
+    } else {
+      mainApi.likeCard(movie)
+        .then((res) => {
+          console.log(res, 'card is liked');
+        })
+        .catch(err => console.log(err))
+    }
+  }
+
   return (
     <CurrentUser.Provider value={currentUser}>
       <div className="page">
@@ -145,6 +173,10 @@ function App() {
                   cards={cards}
                   isNotFoundError={isNotFoundError}
                   isError={isError}
+
+                  onLike={onLike}
+                  likedMovies={likedMovies}
+                  getLikedMovies={getLikedMovies}
                 />
               }
             />

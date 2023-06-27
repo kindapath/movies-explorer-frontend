@@ -6,14 +6,22 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import More from '../More/More';
 import Preloader from '../Preloader/Preloader';
 import Error from '../Error/Error';
+import { useEffect } from 'react';
 
 const Movies = ({
   isLoading,
   handleSearch,
   cards,
   isError,
-  isNotFoundError
+  isNotFoundError,
+  onLike,
+  likedMovies,
+  getLikedMovies
 }) => {
+
+  useEffect(() => {
+    getLikedMovies()
+  }, [])
 
   function renderSwitch(param) {
 
@@ -30,7 +38,7 @@ const Movies = ({
       default:
         return (
           <>
-            <MoviesCardList cards={cards} />
+            <MoviesCardList likedMovies={likedMovies} onLike={onLike} cards={cards} />
             <More />
           </>
         );

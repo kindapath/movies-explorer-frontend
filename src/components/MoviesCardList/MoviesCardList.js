@@ -3,7 +3,7 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 
 import './MoviesCardList.css';
 
-const MoviesCardList = ({ cards }) => {
+const MoviesCardList = ({ cards, onLike, likedMovies }) => {
 
   return (
     <section className='movies-list movies__movies-list'>
@@ -17,6 +17,10 @@ const MoviesCardList = ({ cards }) => {
                 name={movie.nameRU}
                 duration={movie.duration}
                 trailerLink={movie.trailerLink}
+                movie={movie}
+
+                onLike={onLike}
+                likedMovies={likedMovies}
               />
             </li>
           )

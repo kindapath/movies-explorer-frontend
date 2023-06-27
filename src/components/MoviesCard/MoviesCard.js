@@ -5,10 +5,16 @@ import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 
-const MoviesCard = ({ image, name, duration, trailerLink }) => {
-  //temporary solution
-  const [isLiked, setIsLiked] = useState(false)
+const MoviesCard = ({ image, name, duration, trailerLink, onLike, movie, likedMovies }) => {
+  const isInitiallyLiked = likedMovies.some((likedMovie) => likedMovie._id === movie._id);
+
+  const [isLiked, setIsLiked] = useState(isInitiallyLiked)
   const location = useLocation()
+
+  function handleLike(e) {
+    e.preventDefault()
+    onLike(movie)
+  }
 
   function toHoursAndMinutes(totalMinutes) {
     const hours = Math.floor(totalMinutes / 60);
@@ -16,8 +22,6 @@ const MoviesCard = ({ image, name, duration, trailerLink }) => {
 
     return `${hours} ч${minutes > 0 ? ` ${minutes} мин` : ''}`;
   }
-
-  console.log();
 
   return (
     <article className='card'>
@@ -35,7 +39,7 @@ const MoviesCard = ({ image, name, duration, trailerLink }) => {
 
         <div className='card__column card__column_like'>
           {location.pathname === '/movies' &&
-            <button className="card__like" onClick={() => { setIsLiked(!isLiked) }}>
+            <button className="card__like" onClick={handleLike}>
               <svg
                 className={`card__like-icon ${isLiked ? 'card__like-icon_liked' : ''}`}
                 viewBox="0 0 14 12"

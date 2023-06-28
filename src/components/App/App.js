@@ -130,11 +130,11 @@ function App() {
       })
   }
 
-  const onLike = (movie) => {
-    const isLiked = likedMovies.some((likedMovie) => likedMovie._id === movie._id);
+  const onLike = (movie, objectId) => {
+    const isLiked = likedMovies.some((likedMovie) => likedMovie.movieId === movie.movieId);
 
     if (isLiked) {
-      mainApi.dislikeCard(movie)
+      mainApi.dislikeCard(objectId)
         .then((res) => {
           console.log(res, 'card is disliked');
         })

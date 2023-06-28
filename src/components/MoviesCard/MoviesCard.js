@@ -5,15 +5,20 @@ import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 
-const MoviesCard = ({ image, name, duration, trailerLink, onLike, movie, likedMovies }) => {
-  const isInitiallyLiked = likedMovies.some((likedMovie) => likedMovie._id === movie._id);
+const MoviesCard = ({ onLike, movie, likedMovies }) => {
+  const isInitiallyLiked = likedMovies.some((likedMovie) => likedMovie.movieId === movie.movieId);
+  const objectId = likedMovies.forEach((likedMovie) => {
+    if (likedMovie.movieId === movie.movieId) {
+      return likedMovie._id
+    }
+  });
 
   const [isLiked, setIsLiked] = useState(isInitiallyLiked)
   const location = useLocation()
 
   function handleLike(e) {
     e.preventDefault()
-    onLike(movie)
+    onLike(movie, objectId)
   }
 
   function toHoursAndMinutes(totalMinutes) {
@@ -25,16 +30,16 @@ const MoviesCard = ({ image, name, duration, trailerLink, onLike, movie, likedMo
 
   return (
     <article className='card'>
-      <Link to={trailerLink} target='_blank'>
-        <img className='card__image' src={image} alt='Фото карточки' />
+      <Link to={movie.trailerLink} target='_blank'>
+        <img className='card__image' src={`https://api.nomoreparties.co${movie.image.url}`} alt='Фото карточки' />
       </Link>
 
 
       <div className='card__row'>
 
         <div className='card__column'>
-          <h2 className='card__heading'>{name}</h2>
-          <p className='card__time'>{toHoursAndMinutes(duration)}</p>
+          <h2 className='card__heading'>{movie.name}</h2>
+          <p className='card__time'>{toHoursAndMinutes(movie.duration)}</p>
         </div>
 
         <div className='card__column card__column_like'>

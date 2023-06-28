@@ -83,7 +83,37 @@ class MainApi {
   }
 
   getLikedMovies() {
+    return fetch(`${this._baseUrl}/movies`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+      },
+    })
+      .then(this._checkResponse);
+  }
 
+  likeCard(movie) {
+    return fetch(`${this._baseUrl}/movies`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+      },
+      body: movie
+    })
+      .then(this._checkResponse);
+  }
+
+  dislikeCard(id) {
+    return fetch(`${this._baseUrl}/movies/${id}`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+      },
+    })
+      .then(this._checkResponse);
   }
 }
 export const mainApi = new MainApi({

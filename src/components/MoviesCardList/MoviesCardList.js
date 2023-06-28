@@ -13,10 +13,6 @@ const MoviesCardList = ({ cards, onLike, likedMovies }) => {
           return (
             <li>
               <MoviesCard
-                image={`https://api.nomoreparties.co${movie.image.url}`}
-                name={movie.nameRU}
-                duration={movie.duration}
-                trailerLink={movie.trailerLink}
                 movie={movie}
 
                 onLike={onLike}

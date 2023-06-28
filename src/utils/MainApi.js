@@ -99,15 +99,28 @@ class MainApi {
       credentials: 'include',
       headers: {
         'Accept': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: movie
+      body: JSON.stringify({
+        "country": movie.country,
+        "director": movie.director,
+        "duration": movie.duration,
+        "year": movie.year,
+        "description": movie.description,
+        "image": `https://api.nomoreparties.co${movie.image.url}`,
+        "trailerLink": movie.trailerLink,
+        "thumbnail": `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`,
+        "movieId": movie.id,
+        "nameRU": movie.nameRU,
+        "nameEN": movie.nameEN
+      })
     })
       .then(this._checkResponse);
   }
 
-  dislikeCard(id) {
-    return fetch(`${this._baseUrl}/movies/${id}`, {
-      method: 'POST',
+  dislikeCard(objectId) {
+    return fetch(`${this._baseUrl}/movies/${objectId}`, {
+      method: 'DELETE',
       credentials: 'include',
       headers: {
         'Accept': 'application/json',

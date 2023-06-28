@@ -37,8 +37,8 @@ function App() {
 
   function getLikedMovies() {
     mainApi.getLikedMovies()
-      .then((likedMovies) => {
-        setLikedMovies([likedMovies])
+      .then((updatedMovies) => {
+        setLikedMovies(updatedMovies)
       })
       .catch(err => console.log(err))
   }
@@ -107,7 +107,6 @@ function App() {
     mainApi.logout()
       .then(() => {
         navigate('/')
-        console.log('logout succesfully')
       })
       .catch((err) => {
         console.log(err.message)
@@ -117,7 +116,6 @@ function App() {
   const onEditProfile = ({ email, name }) => {
     mainApi.editProfile({ email, name })
       .then((userData) => {
-        console.log(userData)
         setCurrentUser({
           name: userData.name,
           email: userData.email
@@ -131,21 +129,24 @@ function App() {
   }
 
   const onLike = (movie, objectId) => {
-    const isLiked = likedMovies.some((likedMovie) => likedMovie.movieId === movie.movieId);
+    const isLiked = likedMovies.some((likedMovie) => likedMovie.movieId === movie.id);
 
     if (isLiked) {
       mainApi.dislikeCard(objectId)
-        .then((res) => {
-          console.log(res, 'card is disliked');
+        .then((newMovie) => {
+          const newMovies = likedMovies.filter((likedMovie) => likedMovie.movieId === newMovie.movieId ? null : likedMovie)
+          setLikedMovies(newMovies)
         })
         .catch(err => console.log(err))
     } else {
       mainApi.likeCard(movie)
-        .then((res) => {
-          console.log(res, 'card is liked');
+        .then((newMovie) => {
+          const newMovies = [...likedMovies, newMovie] // [liked movies = [], {newMovie}]
+          setLikedMovies(newMovies)
         })
         .catch(err => console.log(err))
     }
+
   }
 
   return (

@@ -6,18 +6,20 @@ import { useLocation } from 'react-router-dom';
 
 
 const MoviesCard = ({ onLike, movie, likedMovies }) => {
-  const isInitiallyLiked = likedMovies.some((likedMovie) => likedMovie.movieId === movie.movieId);
-  const objectId = likedMovies.forEach((likedMovie) => {
-    if (likedMovie.movieId === movie.movieId) {
-      return likedMovie._id
-    }
+  const isLiked = likedMovies.some((likedMovie) => {
+    return likedMovie.movieId === movie.id
   });
 
-  const [isLiked, setIsLiked] = useState(isInitiallyLiked)
+  const foundMovie = likedMovies.find((likedMovie) => likedMovie.movieId === movie.id)
+
   const location = useLocation()
 
   function handleLike(e) {
     e.preventDefault()
+    let objectId = null
+    if (foundMovie !== undefined) {
+      objectId = foundMovie._id
+    }
     onLike(movie, objectId)
   }
 
@@ -38,7 +40,7 @@ const MoviesCard = ({ onLike, movie, likedMovies }) => {
       <div className='card__row'>
 
         <div className='card__column'>
-          <h2 className='card__heading'>{movie.name}</h2>
+          <h2 className='card__heading'>{movie.nameRU}</h2>
           <p className='card__time'>{toHoursAndMinutes(movie.duration)}</p>
         </div>
 
@@ -55,7 +57,7 @@ const MoviesCard = ({ onLike, movie, likedMovies }) => {
           }
 
           {location.pathname === '/saved-movies' &&
-            <button className="card__remove" onClick={() => { setIsLiked(!isLiked) }}>
+            <button className="card__remove" onClick={() => { }}>
               <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M5.06077 3.8822L7.30003 1.64294L6.23937 0.582275L4.00011 2.82154L1.76097 0.582391L0.700309 1.64305L2.93945 3.8822L0.58252 6.23913L1.64318 7.29979L4.00011 4.94286L6.35716 7.29991L7.41782 6.23925L5.06077 3.8822Z" fill="white" />
               </svg>

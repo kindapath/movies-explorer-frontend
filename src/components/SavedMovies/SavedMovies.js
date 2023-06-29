@@ -4,8 +4,13 @@ import SearchForm from '../SearchForm/SearchForm';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
+import { useEffect } from 'react';
 
-const SavedMovies = ({ isLoading }) => {
+const SavedMovies = ({ isLoading, likedMovies, getLikedMovies }) => {
+
+  useEffect(() => {
+    getLikedMovies()
+  }, [])
 
   return (
     <main className='movies'>
@@ -15,7 +20,7 @@ const SavedMovies = ({ isLoading }) => {
         isLoading ?
           <Preloader />
           :
-          <MoviesCardList />
+          <MoviesCardList cards={likedMovies} likedMovies={likedMovies} />
       }
     </main>
 

@@ -141,7 +141,7 @@ function App() {
     } else {
       mainApi.likeCard(movie)
         .then((newMovie) => {
-          const newMovies = [...likedMovies, newMovie] // [liked movies = [], {newMovie}]
+          const newMovies = [...likedMovies, newMovie]
           setLikedMovies(newMovies)
         })
         .catch(err => console.log(err))
@@ -188,7 +188,10 @@ function App() {
                 <ProtectedRouteElement
                   element={SavedMovies}
                   isLoggedIn={isLoggedIn}
-                  isLoading={isLoading} />
+                  isLoading={isLoading}
+                  likedMovies={likedMovies}
+                  getLikedMovies={getLikedMovies}
+                />
               }
             />
 

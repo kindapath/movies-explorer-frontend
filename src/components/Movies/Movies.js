@@ -16,7 +16,8 @@ const Movies = ({
   isNotFoundError,
   onLike,
   likedMovies,
-  getLikedMovies
+  getLikedMovies,
+  handleMore
 }) => {
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const Movies = ({
         return (
           <>
             <MoviesCardList likedMovies={likedMovies} onLike={onLike} cards={cards} />
-            <More />
+            <More handleMore={handleMore} />
           </>
         );
     }

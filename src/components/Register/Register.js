@@ -2,7 +2,6 @@
 import AuthPage from '../AuthPage/AuthPage';
 import Input from '../Input/Input';
 import Form from '../Form/Form';
-import useValidation from '../../hooks/useValidation';
 import { useFormWithValidation } from '../../hooks/useForm';
 
 

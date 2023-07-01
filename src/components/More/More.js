@@ -2,9 +2,11 @@
 
 import './More.css';
 
-const More = () => {
+const More = ({
+  handleMore
+}) => {
   return (
-    <button className='more movies__more'>
+    <button onClick={handleMore} className='more movies__more'>
       <p className='more__text'>Ещё</p>
     </button>
   )

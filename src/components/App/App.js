@@ -11,6 +11,7 @@ import './App.css';
 import { moviesApi } from '../../utils/MoviesApi';
 
 
+import { useMediaQuery } from 'react-responsive'
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Layout from '../Layout/Layout';
 import NotFound from '../NotFound/NotFound';
@@ -21,11 +22,17 @@ import { mainApi } from '../../utils/MainApi';
 
 function App() {
   const navigate = useNavigate();
+  const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' });
+  const isMediumScreen = useMediaQuery({ query: '(min-width: 544px)' })
+  const isSmallScreen = useMediaQuery({ query: '(max-width: 544px)' })
+
+
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
-  const [cards, setCards] = useState([])
+  const [allCards, setAllCards] = useState([])
+  const [renderedCards, setRenderedCards] = useState([])
   const [inputOn, setInputOn] = useState(false)
   const [hiddenSubmit, setHiddenSubmit] = useState(true)
 
@@ -55,6 +62,7 @@ function App() {
   }
 
 
+
   useEffect(() => {
     checkToken()
   }, [])
@@ -65,10 +73,49 @@ function App() {
       .then((movies) => {
         // throw new Error()
         setIsLoading(false)
-        setCards(movies)
-        localStorage.setItem("cards", movies)
+
+        setAllCards(movies)
+
+        let sliced = null
+
+        if (isBigScreen) {
+          sliced = movies.slice(0, 12)
+        } else if (isMediumScreen) {
+          sliced = movies.slice(0, 8)
+        } else {
+          sliced = movies.slice(0, 5)
+        }
+
+        setRenderedCards(sliced)
+
       })
       .catch(() => { })
+  }
+
+  function handleMore() {
+    // take allCards array
+
+    // take renderedCards array
+
+    // create moreSliced const source of which will be allCards
+
+    // take renderedCards.length and rendreredCards.length + 16/8/5
+
+    const rangeFrom = Number(renderedCards.length)
+    const rangeTo = Number(renderedCards.length + 16)
+
+    // take items from the range of renderedCards.length to rendreredCards.length + 16/8/5
+    // and assign them to moreSliced
+    const slicedRange = allCards.slice(rangeFrom, rangeTo)
+
+    // const newCards = copy renderedCards and add moreSliced
+    const newCards = [...renderedCards, slicedRange]
+    console.log(newCards)
+
+    // set renderedCards to newCards
+    setRenderedCards(newCards)
+
+    console.log(renderedCards)
   }
 
   // меняем стейт логина и переводим юзера на страницу фильмов
@@ -171,13 +218,15 @@ function App() {
                   isLoggedIn={isLoggedIn}
                   isLoading={isLoading}
                   handleSearch={handleSearch}
-                  cards={cards}
+                  cards={renderedCards}
                   isNotFoundError={isNotFoundError}
                   isError={isError}
 
                   onLike={onLike}
                   likedMovies={likedMovies}
                   getLikedMovies={getLikedMovies}
+
+                  handleMore={handleMore}
                 />
               }
             />

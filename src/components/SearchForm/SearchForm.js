@@ -1,6 +1,5 @@
 // форма поиска, куда пользователь будет вводить запрос
 import './SearchForm.css';
-import useValidation from '../../hooks/useValidation';
 
 const SearchForm = ({ handleSearch }) => {
   function onSubmit(e) {

@@ -9,6 +9,7 @@ import Register from '../Register/Register';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import './App.css';
 import { moviesApi } from '../../utils/MoviesApi';
+import NotFoundError from "../../errors/NotFoundError";
 
 
 import { useMediaQuery } from 'react-responsive'
@@ -17,8 +18,8 @@ import Layout from '../Layout/Layout';
 import NotFound from '../NotFound/NotFound';
 import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
 import { CurrentUser } from '../../contexts/CurrentUser';
-import Error from '../Error/Error';
 import { mainApi } from '../../utils/MainApi';
+import { filterShortMovies, search } from '../../utils/utils';
 
 function App() {
   const navigate = useNavigate();
@@ -35,6 +36,8 @@ function App() {
   const [renderedCards, setRenderedCards] = useState([])
   const [inputOn, setInputOn] = useState(false)
   const [hiddenSubmit, setHiddenSubmit] = useState(true)
+  const [isFilterChecked, setIsFilterChecked] = useState(false)
+
 
   const [isNotFoundError, setIsNotFoundError] = useState(false)
   const [isError, setIsError] = useState(false)
@@ -65,42 +68,64 @@ function App() {
     checkToken()
   }, [])
 
-  function handleSearch() {
+  useEffect(() => {
+    setRenderedCards(filterShortMovies(renderedCards))
+  }, [isFilterChecked])
+
+  function handleCheckClick() {
+    setIsFilterChecked(!isFilterChecked)
+  }
+
+  function handleSearch(keyword) {
+    setIsError(false)
+    setIsNotFoundError(false)
     setIsLoading(true)
     moviesApi.getMovies()
       .then((movies) => {
-        // throw new Error()
+
         setIsLoading(false)
 
         setAllCards(movies)
 
         let sliced = null
 
+        // instead of movies.slice(0, 12) we can use search(movies) util function
+        // that will return an array with found results
         if (isBigScreen) {
-          sliced = movies.slice(0, 12)
+          sliced = search(keyword, movies, isFilterChecked).slice(0, 12)
         } else if (isMediumScreen) {
-          sliced = movies.slice(0, 8)
+          sliced = search(keyword, movies, isFilterChecked).slice(0, 8)
         } else {
-          sliced = movies.slice(0, 5)
+          sliced = search(keyword, movies, isFilterChecked).slice(0, 5)
         }
 
         setRenderedCards(sliced)
 
       })
-      .catch(() => { })
+      .catch((err) => {
+        if (err instanceof NotFoundError) {
+          setIsNotFoundError(true)
+          return
+        }
+        setIsError(true)
+      })
   }
 
   function handleMore() {
-    // take allCards array
 
-    // take renderedCards array
-
-    // create moreSliced const source of which will be allCards
-
+    const addCards = () => {
+      if (isBigScreen) {
+        return 3
+      } else if (isMediumScreen) {
+        return 2
+      } else {
+        return 2
+      }
+    }
     // take renderedCards.length and rendreredCards.length + 16/8/5
 
     const rangeFrom = Number(renderedCards.length)
-    const rangeTo = Number(renderedCards.length + 16)
+    const rangeTo = Number(renderedCards.length + addCards())
 
     // take items from the range of renderedCards.length to rendreredCards.length + 16/8/5
     // and assign them to moreSliced
@@ -108,7 +133,6 @@ function App() {
 
     // const newCards = copy renderedCards and add moreSliced
     const newCards = renderedCards.concat(slicedRange)
-
 
     // set renderedCards to newCards
     setRenderedCards(newCards)
@@ -218,6 +242,9 @@ function App() {
                   cards={renderedCards}
                   isNotFoundError={isNotFoundError}
                   isError={isError}
+
+                  isFilterChecked={isFilterChecked}
+                  handleCheckClick={handleCheckClick}
 
                   onLike={onLike}
                   likedMovies={likedMovies}

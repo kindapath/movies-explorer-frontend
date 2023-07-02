@@ -17,7 +17,9 @@ const Movies = ({
   onLike,
   likedMovies,
   getLikedMovies,
-  handleMore
+  handleMore,
+  isFilterChecked,
+  handleCheckClick
 }) => {
 
   useEffect(() => {
@@ -49,7 +51,7 @@ const Movies = ({
   return (
     <main className='movies'>
       <SearchForm handleSearch={handleSearch} />
-      <FilterCheckbox />
+      <FilterCheckbox isFilterChecked={isFilterChecked} handleCheckClick={handleCheckClick} />
 
 
       {

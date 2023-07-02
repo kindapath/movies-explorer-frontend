@@ -61,8 +61,6 @@ function App() {
       })
   }
 
-
-
   useEffect(() => {
     checkToken()
   }, [])
@@ -109,13 +107,12 @@ function App() {
     const slicedRange = allCards.slice(rangeFrom, rangeTo)
 
     // const newCards = copy renderedCards and add moreSliced
-    const newCards = [...renderedCards, slicedRange]
-    console.log(newCards)
+    const newCards = renderedCards.concat(slicedRange)
+
 
     // set renderedCards to newCards
     setRenderedCards(newCards)
 
-    console.log(renderedCards)
   }
 
   // меняем стейт логина и переводим юзера на страницу фильмов

@@ -111,6 +111,25 @@ function App() {
       })
   }
 
+  function handleSavedSearch(keyword) {
+    setIsError(false)
+    setIsNotFoundError(false)
+    setIsLoading(true)
+
+    let sliced = null
+
+    if (isBigScreen) {
+      sliced = search(keyword, movies, isFilterChecked).slice(0, 12)
+    } else if (isMediumScreen) {
+      sliced = search(keyword, movies, isFilterChecked).slice(0, 8)
+    } else {
+      sliced = search(keyword, movies, isFilterChecked).slice(0, 5)
+    }
+
+    setRenderedCards(sliced)
+
+  }
+
   function handleMore() {
 
     const addCards = () => {
@@ -264,6 +283,7 @@ function App() {
                   isLoading={isLoading}
                   likedMovies={likedMovies}
                   getLikedMovies={getLikedMovies}
+                  onLike={onLike}
                 />
               }
             />

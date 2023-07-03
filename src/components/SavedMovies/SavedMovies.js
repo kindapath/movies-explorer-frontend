@@ -6,7 +6,7 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
 import { useEffect } from 'react';
 
-const SavedMovies = ({ isLoading, likedMovies, getLikedMovies }) => {
+const SavedMovies = ({ isLoading, likedMovies, getLikedMovies, onRemove }) => {
 
   useEffect(() => {
     getLikedMovies()
@@ -20,7 +20,7 @@ const SavedMovies = ({ isLoading, likedMovies, getLikedMovies }) => {
         isLoading ?
           <Preloader />
           :
-          <MoviesCardList cards={likedMovies} likedMovies={likedMovies} />
+          <MoviesCardList cards={likedMovies} likedMovies={likedMovies} onRemove={onRemove} />
       }
     </main>
 

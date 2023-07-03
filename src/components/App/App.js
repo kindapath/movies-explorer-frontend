@@ -63,7 +63,7 @@ function App() {
     setIsLoading(true)
     moviesApi.getMovies()
       .then((movies) => {
-        // throw new Error()
+
         setIsLoading(false)
         setCards(movies)
         localStorage.setItem("cards", movies)
@@ -106,6 +106,7 @@ function App() {
   const onLogout = () => {
     mainApi.logout()
       .then(() => {
+        setIsLoggedIn(false)
         navigate('/')
       })
       .catch((err) => {
@@ -122,31 +123,43 @@ function App() {
         })
         setInputOn(false)
         setHiddenSubmit(true)
+        setErrorApi('')
       })
       .catch((err) => {
         setErrorApi(err.message)
       })
   }
 
+  const dislikeCard = (objectId) => {
+    mainApi.dislikeCard(objectId)
+      .then((newMovie) => {
+        const newMovies = likedMovies.filter((likedMovie) => likedMovie.movieId === newMovie.movieId ? null : likedMovie)
+        setLikedMovies(newMovies)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const likeCard = (movie) => {
+    mainApi.likeCard(movie)
+      .then((newMovie) => {
+        const newMovies = [...likedMovies, newMovie]
+        setLikedMovies(newMovies)
+      })
+      .catch(err => console.log(err))
+  }
+
+
   const onLike = (movie, objectId) => {
     const isLiked = likedMovies.some((likedMovie) => likedMovie.movieId === movie.id);
 
     if (isLiked) {
-      mainApi.dislikeCard(objectId)
-        .then((newMovie) => {
-          const newMovies = likedMovies.filter((likedMovie) => likedMovie.movieId === newMovie.movieId ? null : likedMovie)
-          setLikedMovies(newMovies)
-        })
-        .catch(err => console.log(err))
+      dislikeCard(objectId)
     } else {
-      mainApi.likeCard(movie)
-        .then((newMovie) => {
-          const newMovies = [...likedMovies, newMovie]
-          setLikedMovies(newMovies)
-        })
-        .catch(err => console.log(err))
+      likeCard(movie)
     }
-
+  }
+  const onRemove = (objectId) => {
+    dislikeCard(objectId)
   }
 
   return (
@@ -191,6 +204,7 @@ function App() {
                   isLoading={isLoading}
                   likedMovies={likedMovies}
                   getLikedMovies={getLikedMovies}
+                  onRemove={onRemove}
                 />
               }
             />

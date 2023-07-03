@@ -19,7 +19,10 @@ const Profile = ({
 
   function handleSubmit(e) {
     e.preventDefault()
-    onEditProfile(values)
+    onEditProfile({
+      name: values.name || currentUser.name,
+      email: values.email || currentUser.email
+    })
   }
 
   function handleLogout(e) {

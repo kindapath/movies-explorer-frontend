@@ -39,6 +39,7 @@ const Header = ({ isLoggedIn, items }) => {
             <Menu
               menuActive={menuActive}
               handleMenuClick={handleMenuClick}
+              isLoggedIn={isLoggedIn}
             />
           </>
 

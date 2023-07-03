@@ -62,6 +62,8 @@ function App() {
     mainApi.getUserInfo()
       .then((userData) => {
         handleLogin(userData)
+
+
       })
       .catch((err) => {
         navigate('/')
@@ -87,7 +89,6 @@ function App() {
     setIsLoading(true)
     moviesApi.getMovies()
       .then((movies) => {
-
         setAllCards(movies)
 
         renderAdaptively(keyword, movies)
@@ -117,7 +118,10 @@ function App() {
       sliced = search(keyword, movies, isFilterChecked).slice(0, 5)
     }
 
+
     savedMoviesLocation ? setLikedMovies(sliced) : setRenderedCards(sliced)
+    localStorage.setItem('lastSearch', JSON.stringify(sliced))
+
   }
 
   function handleSavedSearch(keyword) {
@@ -179,6 +183,7 @@ function App() {
       email: userData.email
     })
     navigate('/movies')
+
   }
 
   // регистрация

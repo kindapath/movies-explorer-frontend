@@ -6,16 +6,26 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
 import { useEffect } from 'react';
 
-const SavedMovies = ({ isLoading, likedMovies, getLikedMovies, onRemove }) => {
+const SavedMovies = ({
+  isLoading,
+  likedMovies,
+  getLikedMovies,
+  onRemove,
+  handleSavedSearch,
+  isFilterChecked,
+  handleCheckClick,
+  setIsFilterChecked
+}) => {
 
   useEffect(() => {
     getLikedMovies()
+    setIsFilterChecked(false)
   }, [])
 
   return (
     <main className='movies'>
-      <SearchForm />
-      <FilterCheckbox />
+      <SearchForm handleSavedSearch={handleSavedSearch} />
+      <FilterCheckbox isFilterChecked={isFilterChecked} handleCheckClick={handleCheckClick} />
       {
         isLoading ?
           <Preloader />

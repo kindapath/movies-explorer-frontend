@@ -13,7 +13,7 @@ import NotFoundError from "../../errors/NotFoundError";
 
 
 import { useMediaQuery } from 'react-responsive'
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Layout from '../Layout/Layout';
 import NotFound from '../NotFound/NotFound';
 import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
@@ -25,7 +25,9 @@ function App() {
   const navigate = useNavigate();
   const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' });
   const isMediumScreen = useMediaQuery({ query: '(min-width: 544px)' })
-  const isSmallScreen = useMediaQuery({ query: '(max-width: 544px)' })
+
+  const location = useLocation()
+  const savedMoviesLocation = location.pathname === '/saved-movies'
 
 
 
@@ -44,11 +46,14 @@ function App() {
   const [errorApi, setErrorApi] = useState('')
 
   const [likedMovies, setLikedMovies] = useState([])
+  const [allLikedMovies, setAllLikedMovies] = useState([])
+
 
   function getLikedMovies() {
     mainApi.getLikedMovies()
       .then((updatedMovies) => {
         setLikedMovies(updatedMovies)
+        setAllLikedMovies(updatedMovies)
       })
       .catch(err => console.log(err))
   }
@@ -69,7 +74,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    setRenderedCards(filterShortMovies(renderedCards))
+    savedMoviesLocation ? setLikedMovies(filterShortMovies(likedMovies)) : setRenderedCards(filterShortMovies(renderedCards))
   }, [isFilterChecked])
 
   function handleCheckClick() {
@@ -83,23 +88,9 @@ function App() {
     moviesApi.getMovies()
       .then((movies) => {
 
-        setIsLoading(false)
-
         setAllCards(movies)
 
-        let sliced = null
-
-        // instead of movies.slice(0, 12) we can use search(movies) util function
-        // that will return an array with found results
-        if (isBigScreen) {
-          sliced = search(keyword, movies, isFilterChecked).slice(0, 12)
-        } else if (isMediumScreen) {
-          sliced = search(keyword, movies, isFilterChecked).slice(0, 8)
-        } else {
-          sliced = search(keyword, movies, isFilterChecked).slice(0, 5)
-        }
-
-        setRenderedCards(sliced)
+        renderAdaptively(keyword, movies)
 
       })
       .catch((err) => {
@@ -111,13 +102,13 @@ function App() {
       })
   }
 
-  function handleSavedSearch(keyword) {
-    setIsError(false)
-    setIsNotFoundError(false)
-    setIsLoading(true)
+  function renderAdaptively(keyword, movies) {
+    setIsLoading(false)
 
     let sliced = null
 
+    // instead of movies.slice(0, 12) we can use search(movies) util function
+    // that will return an array with found results
     if (isBigScreen) {
       sliced = search(keyword, movies, isFilterChecked).slice(0, 12)
     } else if (isMediumScreen) {
@@ -126,8 +117,30 @@ function App() {
       sliced = search(keyword, movies, isFilterChecked).slice(0, 5)
     }
 
-    setRenderedCards(sliced)
+    savedMoviesLocation ? setLikedMovies(sliced) : setRenderedCards(sliced)
+  }
 
+  function handleSavedSearch(keyword) {
+    console.log(keyword);
+    setIsError(false)
+    setIsNotFoundError(false)
+    setIsLoading(true)
+
+    mainApi.getLikedMovies()
+      .then((likedMovies) => {
+
+        setAllLikedMovies(likedMovies)
+
+        renderAdaptively(keyword, likedMovies)
+
+      })
+      .catch((err) => {
+        if (err instanceof NotFoundError) {
+          setIsNotFoundError(true)
+          return
+        }
+        setIsError(true)
+      })
   }
 
   function handleMore() {
@@ -283,6 +296,8 @@ function App() {
                   getLikedMovies={getLikedMovies}
 
                   handleMore={handleMore}
+
+                  setIsFilterChecked={setIsFilterChecked}
                 />
               }
             />
@@ -297,6 +312,10 @@ function App() {
                   likedMovies={likedMovies}
                   getLikedMovies={getLikedMovies}
                   onRemove={onRemove}
+                  handleSavedSearch={handleSavedSearch}
+                  isFilterChecked={isFilterChecked}
+                  handleCheckClick={handleCheckClick}
+                  setIsFilterChecked={setIsFilterChecked}
                 />
               }
             />

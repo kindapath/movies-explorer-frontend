@@ -1,8 +1,9 @@
 // форма поиска, куда пользователь будет вводить запрос
+import { useLocation } from 'react-router-dom';
 import { useFormWithValidation } from '../../hooks/useForm';
 import './SearchForm.css';
 
-const SearchForm = ({ handleSearch }) => {
+const SearchForm = ({ handleSearch, handleSavedSearch }) => {
 
   const {
     values,
@@ -10,8 +11,17 @@ const SearchForm = ({ handleSearch }) => {
     formValid,
   } = useFormWithValidation()
 
+  const location = useLocation()
+  const savedMoviesLocation = location.pathname === '/saved-movies'
+
   function onSubmit(e) {
     e.preventDefault()
+
+    if (savedMoviesLocation) {
+      handleSavedSearch(values.search)
+      return
+    }
+
     handleSearch(values.search)
   }
 

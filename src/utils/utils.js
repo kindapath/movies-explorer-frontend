@@ -11,7 +11,6 @@ export function filterShortMovies(moviesArray) {
 
 export function search(keyword, moviesArray, isFilterChecked) {
   // take moviesArray
-
   // create new array for ex. resultsArray
   // that wiil be final result
   const resultArray = []

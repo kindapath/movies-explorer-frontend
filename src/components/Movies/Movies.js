@@ -19,11 +19,13 @@ const Movies = ({
   getLikedMovies,
   handleMore,
   isFilterChecked,
-  handleCheckClick
+  handleCheckClick,
+  setIsFilterChecked
 }) => {
 
   useEffect(() => {
     getLikedMovies()
+    setIsFilterChecked(false)
   }, [])
 
   function renderSwitch(param) {

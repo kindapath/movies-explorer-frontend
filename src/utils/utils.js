@@ -18,20 +18,13 @@ export function search(keyword, moviesArray, isFilterChecked) {
   // let resultsArray be the following:
   // we take moviesArray and the nameRU property of each item
   moviesArray.forEach(item => {
-    // split nameRU prop
-    const splittedName = item.nameRU.split(' ')
 
-    // compare keyword to each splitted word
-    splittedName.forEach(word => {
-      // if any similarities
+    if (item.nameRU.toLowerCase() === keyword.toLowerCase()) {
+      // => push the item to resultsArray
 
-      if (word.toLowerCase() === keyword.toLowerCase()) {
-        // => push the item to resultsArray
-
-        resultArray.push(item)
-        return
-      }
-    });
+      resultArray.push(item)
+      return
+    }
 
   });
   if (resultArray.length === 0) {

@@ -20,12 +20,13 @@ const Movies = ({
   handleMore,
   isFilterChecked,
   handleCheckClick,
-  setIsFilterChecked
+  setIsFilterChecked,
+  lastSearch
 }) => {
 
   useEffect(() => {
     getLikedMovies()
-    setIsFilterChecked(false)
+    setIsFilterChecked(lastSearch.filter)
   }, [])
 
   function renderSwitch(param) {
@@ -52,7 +53,7 @@ const Movies = ({
 
   return (
     <main className='movies'>
-      <SearchForm handleSearch={handleSearch} />
+      <SearchForm handleSearch={handleSearch} lastSearch={lastSearch} />
       <FilterCheckbox isFilterChecked={isFilterChecked} handleCheckClick={handleCheckClick} />
 
 

@@ -12,7 +12,8 @@ const Form = ({
   children,
   errorApi,
 
-  hiddenSubmit
+  hiddenSubmit,
+  successMsg
 }) => {
 
   return (
@@ -25,7 +26,10 @@ const Form = ({
         errorApi !== '' &&
         <Error errorText={errorApi} addclass='error_auth' />
       }
-
+      {
+        successMsg !== '' && errorApi === '' &&
+        <p className='success'>{successMsg}</p>
+      }
       {
         hiddenSubmit
           ?

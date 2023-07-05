@@ -34,7 +34,11 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
+
   const [allCards, setAllCards] = useState([])
+  const allCardsStored = JSON.parse(localStorage.getItem('allCardsStored'))
+
+
   const [renderedCards, setRenderedCards] = useState([])
   const [inputOn, setInputOn] = useState(false)
   const [hiddenSubmit, setHiddenSubmit] = useState(true)
@@ -45,15 +49,30 @@ function App() {
   const [isError, setIsError] = useState(false)
   const [errorApi, setErrorApi] = useState('')
 
-  const [likedMovies, setLikedMovies] = useState([])
-  const [allLikedMovies, setAllLikedMovies] = useState([])
+  const [successMsg, setSuccessMsg] = useState('')
 
+  const [likedMovies, setLikedMovies] = useState([])
+
+  const [lastSearch, setLastSearch] = useState({
+    cards: JSON.parse(localStorage.getItem('lastSearch')) ? JSON.parse(localStorage.getItem('lastSearch')) : null,
+    text: localStorage.getItem('lastSearchText') ? localStorage.getItem('lastSearchText') : null,
+    filter: JSON.parse(localStorage.getItem('lastSearchFilter')) ? JSON.parse(localStorage.getItem('lastSearchFilter')) : false,
+  })
+
+  const [lastSearchLiked, setLastSearchLiked] = useState({
+    cards: JSON.parse(localStorage.getItem('lastSearchLiked')) ? JSON.parse(localStorage.getItem('lastSearchLiked')) : null,
+    text: localStorage.getItem('lastSearchTextLiked') ? localStorage.getItem('lastSearchTextLiked') : null,
+    filter: JSON.parse(localStorage.getItem('lastSearchFilterLiked')) ? JSON.parse(localStorage.getItem('lastSearchFilterLiked')) : false,
+  })
+
+  useEffect(() => {
+    lastSearch.cards = JSON.parse(localStorage.getItem('lastSearch'))
+  }, [renderedCards])
 
   function getLikedMovies() {
     mainApi.getLikedMovies()
       .then((updatedMovies) => {
         setLikedMovies(updatedMovies)
-        setAllLikedMovies(updatedMovies)
       })
       .catch(err => console.log(err))
   }
@@ -62,8 +81,6 @@ function App() {
     mainApi.getUserInfo()
       .then((userData) => {
         handleLogin(userData)
-
-
       })
       .catch((err) => {
         navigate('/')
@@ -76,7 +93,13 @@ function App() {
   }, [])
 
   useEffect(() => {
-    savedMoviesLocation ? setLikedMovies(filterShortMovies(likedMovies)) : setRenderedCards(filterShortMovies(renderedCards))
+    if (savedMoviesLocation) {
+      setLikedMovies(filterShortMovies(likedMovies))
+      JSON.stringify(localStorage.setItem('lastSearchFilterLiked', isFilterChecked))
+    } else {
+      setRenderedCards(filterShortMovies(renderedCards))
+      JSON.stringify(localStorage.setItem('lastSearchFilter', isFilterChecked))
+    }
   }, [isFilterChecked])
 
   function handleCheckClick() {
@@ -87,20 +110,28 @@ function App() {
     setIsError(false)
     setIsNotFoundError(false)
     setIsLoading(true)
-    moviesApi.getMovies()
-      .then((movies) => {
-        setAllCards(movies)
+    localStorage.setItem('lastSearchText', keyword)
 
-        renderAdaptively(keyword, movies)
+    if (lastSearch.cards !== null) {
+      renderAdaptively(keyword, allCardsStored)
+    } else {
+      moviesApi.getMovies()
+        .then((movies) => {
+          setAllCards(movies)
+          localStorage.setItem('allCardsStored', JSON.stringify(movies))
 
-      })
-      .catch((err) => {
-        if (err instanceof NotFoundError) {
-          setIsNotFoundError(true)
-          return
-        }
-        setIsError(true)
-      })
+          renderAdaptively(keyword, movies)
+
+        })
+        .catch((err) => {
+          if (err instanceof NotFoundError) {
+            setIsNotFoundError(true)
+            return
+          }
+          setIsError(true)
+        })
+    }
+
   }
 
   function renderAdaptively(keyword, movies) {
@@ -118,22 +149,24 @@ function App() {
       sliced = search(keyword, movies, isFilterChecked).slice(0, 5)
     }
 
-
-    savedMoviesLocation ? setLikedMovies(sliced) : setRenderedCards(sliced)
-    localStorage.setItem('lastSearch', JSON.stringify(sliced))
+    if (savedMoviesLocation) {
+      setLikedMovies(sliced)
+      localStorage.setItem('lastSearchLiked', JSON.stringify(sliced))
+    } else {
+      setRenderedCards(sliced)
+      localStorage.setItem('lastSearch', JSON.stringify(sliced))
+    }
 
   }
 
   function handleSavedSearch(keyword) {
-    console.log(keyword);
     setIsError(false)
     setIsNotFoundError(false)
     setIsLoading(true)
+    localStorage.setItem('lastSearchTextLiked', keyword)
 
     mainApi.getLikedMovies()
       .then((likedMovies) => {
-
-        setAllLikedMovies(likedMovies)
 
         renderAdaptively(keyword, likedMovies)
 
@@ -165,7 +198,8 @@ function App() {
 
     // take items from the range of renderedCards.length to rendreredCards.length + 16/8/5
     // and assign them to moreSliced
-    const slicedRange = allCards.slice(rangeFrom, rangeTo)
+
+    const slicedRange = allCardsStored !== null ? allCardsStored.slice(rangeFrom, rangeTo) : allCards.slice(rangeFrom, rangeTo)
 
     // const newCards = copy renderedCards and add moreSliced
     const newCards = renderedCards.concat(slicedRange)
@@ -184,6 +218,12 @@ function App() {
     })
     navigate('/movies')
 
+    // let lastSearch = null
+    // lastSearch = JSON.parse(localStorage.getItem('lastSearch'))
+
+    if (lastSearch.cards !== null) {
+      renderAdaptively(lastSearch.text, lastSearch.cards)
+    }
   }
 
   // регистрация
@@ -229,9 +269,15 @@ function App() {
         setInputOn(false)
         setHiddenSubmit(true)
         setErrorApi('')
+        setSuccessMsg('Вы успешно изменили свой профиль')
       })
       .catch((err) => {
         setErrorApi(err.message)
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setSuccessMsg('')
+        }, 3000);
       })
   }
 
@@ -303,6 +349,8 @@ function App() {
                   handleMore={handleMore}
 
                   setIsFilterChecked={setIsFilterChecked}
+
+                  lastSearch={lastSearch}
                 />
               }
             />
@@ -321,6 +369,8 @@ function App() {
                   isFilterChecked={isFilterChecked}
                   handleCheckClick={handleCheckClick}
                   setIsFilterChecked={setIsFilterChecked}
+
+                  lastSearchLiked={lastSearchLiked}
                 />
               }
             />
@@ -338,6 +388,7 @@ function App() {
                   setInputOn={setInputOn}
                   setHiddenSubmit={setHiddenSubmit}
                   onLogout={onLogout}
+                  successMsg={successMsg}
                 />
               }
             />

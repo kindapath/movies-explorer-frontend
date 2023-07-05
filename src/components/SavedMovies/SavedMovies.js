@@ -14,17 +14,19 @@ const SavedMovies = ({
   handleSavedSearch,
   isFilterChecked,
   handleCheckClick,
-  setIsFilterChecked
+  setIsFilterChecked,
+
+  lastSearchLiked
 }) => {
 
   useEffect(() => {
     getLikedMovies()
-    setIsFilterChecked(false)
+    setIsFilterChecked(lastSearchLiked.filter)
   }, [])
 
   return (
     <main className='movies'>
-      <SearchForm handleSavedSearch={handleSavedSearch} />
+      <SearchForm handleSavedSearch={handleSavedSearch} lastSearchLiked={lastSearchLiked} />
       <FilterCheckbox isFilterChecked={isFilterChecked} handleCheckClick={handleCheckClick} />
       {
         isLoading ?

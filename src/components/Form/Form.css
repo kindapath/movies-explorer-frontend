@@ -52,6 +52,11 @@
   color: #c2c2c2;
 }
 
+.success {
+  align-self: center;
+  color: greenyellow;
+}
+
 @media screen and (max-width: 544px) {
   .form {
     height: 100%;

@@ -1,5 +1,5 @@
 // компонент страницы изменения профиля
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { CurrentUser } from '../../contexts/CurrentUser'
 import './Profile.css';
 import Form from '../Form/Form';
@@ -13,7 +13,8 @@ const Profile = ({
   hiddenSubmit,
   setInputOn,
   setHiddenSubmit,
-  onLogout
+  onLogout,
+  successMsg
 }) => {
   const currentUser = useContext(CurrentUser)
 
@@ -31,7 +32,6 @@ const Profile = ({
   }
   const {
     values,
-    error,
     onChange,
     formValid,
   } = useFormWithValidation()
@@ -51,6 +51,8 @@ const Profile = ({
 
           buttonText='Сохранить'
           hiddenSubmit={hiddenSubmit}
+
+          successMsg={successMsg}
         >
           <div className='profile__row'>
             <p className='profile__text profile__text_bold'>Имя</p>

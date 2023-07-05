@@ -112,7 +112,7 @@ function App() {
     setIsLoading(true)
     localStorage.setItem('lastSearchText', keyword)
 
-    if (lastSearch.cards !== null) {
+    if (allCardsStored !== null) {
       renderAdaptively(keyword, allCardsStored)
     } else {
       moviesApi.getMovies()

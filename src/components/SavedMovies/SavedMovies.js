@@ -5,6 +5,7 @@ import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
 import { useEffect } from 'react';
+import Error from '../Error/Error';
 
 const SavedMovies = ({
   isLoading,
@@ -15,14 +16,36 @@ const SavedMovies = ({
   isFilterChecked,
   handleCheckClick,
   setIsFilterChecked,
-
-  lastSearchLiked
+  lastSearchLiked,
+  isError,
+  isNotFoundError
 }) => {
 
   useEffect(() => {
     getLikedMovies()
     setIsFilterChecked(lastSearchLiked.filter)
   }, [])
+
+  function renderSwitch(param) {
+
+    switch (true) {
+      case isError:
+        return (
+          <Error
+            errorText='Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз.' />
+        );
+      case isNotFoundError:
+        return (
+          <Error errorText='Ничего не найдено' />
+        );
+      default:
+        return (
+          <>
+            <MoviesCardList cards={likedMovies} likedMovies={likedMovies} onRemove={onRemove} />
+          </>
+        );
+    }
+  }
 
   return (
     <main className='movies'>
@@ -32,7 +55,7 @@ const SavedMovies = ({
         isLoading ?
           <Preloader />
           :
-          <MoviesCardList cards={likedMovies} likedMovies={likedMovies} onRemove={onRemove} />
+          renderSwitch()
       }
     </main>
 

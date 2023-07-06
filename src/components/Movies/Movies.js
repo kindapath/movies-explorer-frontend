@@ -21,7 +21,8 @@ const Movies = ({
   isFilterChecked,
   handleCheckClick,
   setIsFilterChecked,
-  lastSearch
+  lastSearch,
+  hiddenMore
 }) => {
 
   useEffect(() => {
@@ -45,7 +46,7 @@ const Movies = ({
         return (
           <>
             <MoviesCardList likedMovies={likedMovies} onLike={onLike} cards={cards} />
-            <More handleMore={handleMore} />
+            <More hiddenMore={hiddenMore} handleMore={handleMore} />
           </>
         );
     }

@@ -13,7 +13,7 @@ import NotFoundError from "../../errors/NotFoundError";
 
 
 import { useMediaQuery } from 'react-responsive'
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import Layout from '../Layout/Layout';
 import NotFound from '../NotFound/NotFound';
 import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
@@ -37,11 +37,16 @@ function App() {
 
   const [allCards, setAllCards] = useState([])
   const allCardsStored = JSON.parse(localStorage.getItem('allCardsStored'))
+  const allLikedStored = JSON.parse(localStorage.getItem('allLikedStored'))
+
 
 
   const [renderedCards, setRenderedCards] = useState([])
   const [inputOn, setInputOn] = useState(false)
+
   const [hiddenSubmit, setHiddenSubmit] = useState(true)
+  const [hiddenMore, setHiddenMore] = useState(false)
+
   const [isFilterChecked, setIsFilterChecked] = useState(false)
 
 
@@ -65,6 +70,8 @@ function App() {
     filter: JSON.parse(localStorage.getItem('lastSearchFilterLiked')) ? JSON.parse(localStorage.getItem('lastSearchFilterLiked')) : false,
   })
 
+
+
   useEffect(() => {
     lastSearch.cards = JSON.parse(localStorage.getItem('lastSearch'))
   }, [renderedCards])
@@ -73,6 +80,7 @@ function App() {
     mainApi.getLikedMovies()
       .then((updatedMovies) => {
         setLikedMovies(updatedMovies)
+        localStorage.setItem('allLikedStored', JSON.stringify(likedMovies))
       })
       .catch(err => console.log(err))
   }
@@ -110,10 +118,21 @@ function App() {
     setIsError(false)
     setIsNotFoundError(false)
     setIsLoading(true)
+    setHiddenMore(false)
+
     localStorage.setItem('lastSearchText', keyword)
 
     if (allCardsStored !== null) {
-      renderAdaptively(keyword, allCardsStored)
+      try {
+        renderAdaptively(keyword, allCardsStored)
+      } catch (err) {
+        if (err instanceof NotFoundError) {
+          setIsNotFoundError(true)
+          return
+        }
+        setIsError(true)
+      }
+
     } else {
       moviesApi.getMovies()
         .then((movies) => {
@@ -121,6 +140,43 @@ function App() {
           localStorage.setItem('allCardsStored', JSON.stringify(movies))
 
           renderAdaptively(keyword, movies)
+
+        })
+        .catch((err) => {
+          if (err instanceof NotFoundError) {
+            setIsNotFoundError(true)
+            return
+          }
+          setIsError(true)
+        })
+    }
+
+  }
+
+  function handleSavedSearch(keyword) {
+    setIsError(false)
+    setIsNotFoundError(false)
+    setIsLoading(true)
+    localStorage.setItem('lastSearchTextLiked', keyword)
+
+    if (allLikedStored !== null) {
+      try {
+        console.log('tre');
+        renderAdaptively(keyword, allLikedStored)
+      } catch (err) {
+        if (err instanceof NotFoundError) {
+          setIsNotFoundError(true)
+          return
+        }
+        setIsError(true)
+      }
+    } else {
+
+      mainApi.getLikedMovies()
+        .then((likedMovies) => {
+          localStorage.setItem('allLikedStored', JSON.stringify(likedMovies))
+
+          renderAdaptively(keyword, likedMovies)
 
         })
         .catch((err) => {
@@ -159,26 +215,7 @@ function App() {
 
   }
 
-  function handleSavedSearch(keyword) {
-    setIsError(false)
-    setIsNotFoundError(false)
-    setIsLoading(true)
-    localStorage.setItem('lastSearchTextLiked', keyword)
 
-    mainApi.getLikedMovies()
-      .then((likedMovies) => {
-
-        renderAdaptively(keyword, likedMovies)
-
-      })
-      .catch((err) => {
-        if (err instanceof NotFoundError) {
-          setIsNotFoundError(true)
-          return
-        }
-        setIsError(true)
-      })
-  }
 
   function handleMore() {
 
@@ -195,6 +232,11 @@ function App() {
 
     const rangeFrom = Number(renderedCards.length)
     const rangeTo = Number(renderedCards.length + addCards())
+
+    if (rangeTo > renderedCards.length) {
+      setHiddenMore(true)
+      return
+    }
 
     // take items from the range of renderedCards.length to rendreredCards.length + 16/8/5
     // and assign them to moreSliced
@@ -213,13 +255,16 @@ function App() {
   const handleLogin = (userData) => {
     setIsLoggedIn(!isLoggedIn)
     setCurrentUser({
-      name: userData.name, //TODO: исправить на бекенде - чтобы апи логина отдавал и name
+      name: userData.name,
       email: userData.email
     })
-    navigate('/movies')
 
-    // let lastSearch = null
-    // lastSearch = JSON.parse(localStorage.getItem('lastSearch'))
+    if (location.pathname === '/signin' || location.pathname === '/signup') {
+      console.log('ok');
+      navigate('/movies')
+    } else {
+      navigate(location.pathname)
+    }
 
     if (lastSearch.cards !== null) {
       renderAdaptively(lastSearch.text, lastSearch.cards)
@@ -251,6 +296,7 @@ function App() {
   const onLogout = () => {
     mainApi.logout()
       .then(() => {
+        localStorage.clear();
         setIsLoggedIn(false)
         navigate('/')
       })
@@ -286,6 +332,7 @@ function App() {
       .then((newMovie) => {
         const newMovies = likedMovies.filter((likedMovie) => likedMovie.movieId === newMovie.movieId ? null : likedMovie)
         setLikedMovies(newMovies)
+        localStorage.setItem('allLikedStored', JSON.stringify(newMovies))
       })
       .catch(err => console.log(err))
   }
@@ -347,6 +394,7 @@ function App() {
                   getLikedMovies={getLikedMovies}
 
                   handleMore={handleMore}
+                  hiddenMore={hiddenMore}
 
                   setIsFilterChecked={setIsFilterChecked}
 
@@ -371,6 +419,8 @@ function App() {
                   setIsFilterChecked={setIsFilterChecked}
 
                   lastSearchLiked={lastSearchLiked}
+                  isError={isError}
+                  isNotFoundError={isNotFoundError}
                 />
               }
             />

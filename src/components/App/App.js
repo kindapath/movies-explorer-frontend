@@ -80,6 +80,7 @@ function App() {
     mainApi.getLikedMovies()
       .then((updatedMovies) => {
         setLikedMovies(updatedMovies)
+        setInitialLiked(updatedMovies)
         localStorage.setItem('allLikedStored', JSON.stringify(likedMovies))
       })
       .catch(err => console.log(err))
@@ -100,13 +101,31 @@ function App() {
     checkToken()
   }, [])
 
+  const [initialCards, setInitialCards] = useState([])
+  const [initialLiked, setInitialLiked] = useState([])
+
+
   useEffect(() => {
     if (savedMoviesLocation) {
-      setLikedMovies(filterShortMovies(likedMovies))
-      JSON.stringify(localStorage.setItem('lastSearchFilterLiked', isFilterChecked))
+
+      if (isFilterChecked === true) {
+        setLikedMovies(filterShortMovies(likedMovies))
+        JSON.stringify(localStorage.setItem('lastSearchFilterLiked', isFilterChecked))
+      } else {
+        setLikedMovies(initialLiked)
+        JSON.stringify(localStorage.setItem('lastSearchFilterLiked', isFilterChecked))
+      }
+
     } else {
-      setRenderedCards(filterShortMovies(renderedCards))
-      JSON.stringify(localStorage.setItem('lastSearchFilter', isFilterChecked))
+
+      if (isFilterChecked === true) {
+        setRenderedCards(filterShortMovies(renderedCards))
+        JSON.stringify(localStorage.setItem('lastSearchFilter', isFilterChecked))
+      } else {
+        setRenderedCards(initialCards)
+        JSON.stringify(localStorage.setItem('lastSearchFilter', isFilterChecked))
+      }
+
     }
   }, [isFilterChecked])
 
@@ -161,8 +180,7 @@ function App() {
 
     if (allLikedStored !== null) {
       try {
-        console.log('tre');
-        renderAdaptively(keyword, allLikedStored)
+        renderAdaptively(keyword, allLikedStored, setInitialLiked)
       } catch (err) {
         if (err instanceof NotFoundError) {
           setIsNotFoundError(true)
@@ -190,7 +208,7 @@ function App() {
 
   }
 
-  function renderAdaptively(keyword, movies) {
+  function renderAdaptively(keyword, movies, setInitialLiked) {
     setIsLoading(false)
 
     let sliced = null
@@ -198,11 +216,11 @@ function App() {
     // instead of movies.slice(0, 12) we can use search(movies) util function
     // that will return an array with found results
     if (isBigScreen) {
-      sliced = search(keyword, movies, isFilterChecked).slice(0, 12)
+      sliced = search(keyword, movies, isFilterChecked, setInitialCards, setInitialLiked).slice(0, 12)
     } else if (isMediumScreen) {
-      sliced = search(keyword, movies, isFilterChecked).slice(0, 8)
+      sliced = search(keyword, movies, isFilterChecked, setInitialCards, setInitialLiked).slice(0, 8)
     } else {
-      sliced = search(keyword, movies, isFilterChecked).slice(0, 5)
+      sliced = search(keyword, movies, isFilterChecked, setInitialCards, setInitialLiked).slice(0, 5)
     }
 
     if (savedMoviesLocation) {
@@ -260,7 +278,6 @@ function App() {
     })
 
     if (location.pathname === '/signin' || location.pathname === '/signup') {
-      console.log('ok');
       navigate('/movies')
     } else {
       navigate(location.pathname)

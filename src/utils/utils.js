@@ -9,7 +9,7 @@ export function filterShortMovies(moviesArray) {
   return shortArray
 }
 
-export function search(keyword, moviesArray, isFilterChecked) {
+export function search(keyword, moviesArray, isFilterChecked, setInitialCards, setInitialLiked) {
   // take moviesArray
   // create new array for ex. resultsArray
   // that wiil be final result
@@ -19,7 +19,9 @@ export function search(keyword, moviesArray, isFilterChecked) {
   // we take moviesArray and the nameRU property of each item
   moviesArray.forEach(item => {
 
-    if (item.nameRU.toLowerCase() === keyword.toLowerCase()) {
+    if (item.nameRU.toLowerCase().trim().includes(keyword.toLowerCase())
+      ||
+      item.nameEN.toLowerCase().trim().includes(keyword.toLowerCase())) {
       // => push the item to resultsArray
 
       resultArray.push(item)
@@ -30,6 +32,8 @@ export function search(keyword, moviesArray, isFilterChecked) {
   if (resultArray.length === 0) {
     throw new NotFoundError()
   }
+  setInitialLiked ? setInitialLiked(resultArray) : setInitialCards(resultArray)
+
   if (isFilterChecked) {
     return filterShortMovies(resultArray)
   }

@@ -9,6 +9,7 @@ import Menu from '../Menu/Menu';
 import MenuButton from '../MenuButton/MenuButton';
 import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive'
+import { SIGNINPATH, SIGNUPPATH } from '../../constant/constants';
 
 const Header = ({ isLoggedIn, items }) => {
   const [menuActive, setMenuActive] = useState(false);
@@ -46,8 +47,8 @@ const Header = ({ isLoggedIn, items }) => {
           :
 
           <div className='header__auth'>
-            <Link className='link header__register' to="/signup">Регистрация</Link>
-            <Link className='link header__login' to="/signin">Войти</Link>
+            <Link className='link header__register' to={SIGNUPPATH}>Регистрация</Link>
+            <Link className='link header__login' to={SIGNINPATH}>Войти</Link>
           </div>
       }
     </header>

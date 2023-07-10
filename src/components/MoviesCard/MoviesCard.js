@@ -1,8 +1,9 @@
 // компонент одной карточки фильма
 import './MoviesCard.css';
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { MOVIESPATH, SAVEDMOVIESPATH } from '../../constant/constants';
+import { toHoursAndMinutes } from '../../utils/utils';
 
 
 const MoviesCard = ({ onLike, onRemove, movie, likedMovies }) => {
@@ -13,8 +14,8 @@ const MoviesCard = ({ onLike, onRemove, movie, likedMovies }) => {
   const foundMovie = likedMovies.find((likedMovie) => likedMovie.movieId === movie.id)
 
   const location = useLocation()
-  const savedMoviesLocation = location.pathname === '/saved-movies'
-  const moviesLocation = location.pathname === '/movies'
+  const savedMoviesLocation = location.pathname === SAVEDMOVIESPATH
+  const moviesLocation = location.pathname === MOVIESPATH
 
 
   function handleLike(e) {
@@ -30,13 +31,6 @@ const MoviesCard = ({ onLike, onRemove, movie, likedMovies }) => {
     e.preventDefault()
 
     onRemove(movie._id)
-  }
-
-  function toHoursAndMinutes(totalMinutes) {
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-
-    return `${hours} ч${minutes > 0 ? ` ${minutes} мин` : ''}`;
   }
 
   return (

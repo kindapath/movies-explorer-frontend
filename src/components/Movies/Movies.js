@@ -26,7 +26,6 @@ const Movies = ({
 }) => {
 
   useEffect(() => {
-    getLikedMovies()
     setIsFilterChecked(lastSearch.filter)
   }, [])
 

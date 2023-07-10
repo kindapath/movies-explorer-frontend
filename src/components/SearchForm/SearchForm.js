@@ -3,8 +3,9 @@ import { useLocation } from 'react-router-dom';
 import { useFormWithValidation } from '../../hooks/useForm';
 import './SearchForm.css';
 import { useEffect } from 'react';
+import { SAVEDMOVIESPATH } from '../../constant/constants';
 
-const SearchForm = ({ handleSearch, handleSavedSearch, lastSearch, lastSearchLiked }) => {
+const SearchForm = ({ handleSearch, handleSavedSearch, lastSearch }) => {
 
   const {
     values,
@@ -13,10 +14,10 @@ const SearchForm = ({ handleSearch, handleSavedSearch, lastSearch, lastSearchLik
   } = useFormWithValidation()
 
   const location = useLocation()
-  const savedMoviesLocation = location.pathname === '/saved-movies'
+  const savedMoviesLocation = location.pathname === SAVEDMOVIESPATH
 
   useEffect(() => {
-    savedMoviesLocation ? values.search = lastSearchLiked.text : values.search = lastSearch.text
+    savedMoviesLocation ? values.search = '' : values.search = lastSearch.text
   }, [])
 
   function onSubmit(e) {

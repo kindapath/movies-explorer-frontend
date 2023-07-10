@@ -4,7 +4,6 @@ import SearchForm from '../SearchForm/SearchForm';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
-import { useEffect } from 'react';
 import Error from '../Error/Error';
 
 const SavedMovies = ({
@@ -15,16 +14,10 @@ const SavedMovies = ({
   handleSavedSearch,
   isFilterChecked,
   handleCheckClick,
-  setIsFilterChecked,
   lastSearchLiked,
   isError,
   isNotFoundError
 }) => {
-
-  useEffect(() => {
-    getLikedMovies()
-    setIsFilterChecked(lastSearchLiked.filter)
-  }, [])
 
   function renderSwitch(param) {
 

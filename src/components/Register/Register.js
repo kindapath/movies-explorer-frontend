@@ -3,6 +3,7 @@ import AuthPage from '../AuthPage/AuthPage';
 import Input from '../Input/Input';
 import Form from '../Form/Form';
 import { useFormWithValidation } from '../../hooks/useForm';
+import { SIGNINPATH } from '../../constant/constants';
 
 
 
@@ -25,7 +26,7 @@ const Register = ({ onRegister, errorApi }) => {
       welcomeText='Добро пожаловать!'
       questionText='Уже зарегистрированы?'
       linkText='Войти'
-      linkTo='/signin'
+      linkTo={SIGNINPATH}
     >
 
       <Form
@@ -60,6 +61,7 @@ const Register = ({ onRegister, errorApi }) => {
           formValid={formValid}
 
           required
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
         />
 
         <Input

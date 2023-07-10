@@ -1,5 +1,5 @@
 // компонент страницы изменения профиля
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { CurrentUser } from '../../contexts/CurrentUser'
 import './Profile.css';
 import Form from '../Form/Form';
@@ -14,9 +14,29 @@ const Profile = ({
   setInputOn,
   setHiddenSubmit,
   onLogout,
-  successMsg
+  successMsg,
 }) => {
   const currentUser = useContext(CurrentUser)
+
+  function notSame() {
+    if (
+      (currentUser.name === values.name && currentUser.email === values.email)
+      ||
+      (values.name === undefined && currentUser.email === values.email)
+      ||
+      (values.email === undefined && currentUser.name === values.name)
+    ) {
+      return false
+    }
+    return true
+  }
+
+  useEffect(() => {
+    return () => {
+      setInputOn(false)
+      setHiddenSubmit(true)
+    }
+  }, [])
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -46,7 +66,7 @@ const Profile = ({
           className='profile__form'
           name='register'
           onSubmit={handleSubmit}
-          formValid={formValid}
+          formValid={formValid && notSame()}
           errorApi={errorApi}
 
           buttonText='Сохранить'
@@ -81,6 +101,7 @@ const Profile = ({
               value={inputOn ? values.email : currentUser.email}
 
               required
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
               disabled={!inputOn}
             />
           </div>

@@ -39,3 +39,20 @@ export function search(keyword, moviesArray, isFilterChecked, setInitialCards, s
   }
   return resultArray
 }
+
+export function toHoursAndMinutes(totalMinutes) {
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  return `${hours} ч${minutes > 0 ? ` ${minutes} мин` : ''}`;
+}
+
+export const addCards = (isBigScreen, isMediumScreen) => {
+  if (isBigScreen) {
+    return 3
+  } else if (isMediumScreen) {
+    return 2
+  } else {
+    return 2
+  }
+}

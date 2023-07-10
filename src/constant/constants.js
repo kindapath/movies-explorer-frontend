@@ -4,7 +4,7 @@ const SIGNINPATH = '/signin'
 const SIGNUPPATH = '/signup'
 
 
-const ALLCARDSSTORED = JSON.parse(localStorage.getItem('allLikedStored'))
+const ALLCARDSSTORED = JSON.parse(localStorage.getItem('allCardsStored'))
 const ALLLIKEDSTORED = JSON.parse(localStorage.getItem('allLikedStored'))
 
 const MENUITEMS = [

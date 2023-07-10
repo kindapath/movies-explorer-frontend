@@ -3,10 +3,6 @@ const MOVIESPATH = '/movies'
 const SIGNINPATH = '/signin'
 const SIGNUPPATH = '/signup'
 
-
-const ALLCARDSSTORED = JSON.parse(localStorage.getItem('allCardsStored'))
-const ALLLIKEDSTORED = JSON.parse(localStorage.getItem('allLikedStored'))
-
 const MENUITEMS = [
   {
     title: "Главная",
@@ -40,8 +36,6 @@ const NAVLINKS = [
 export {
   SAVEDMOVIESPATH,
   MOVIESPATH,
-  ALLCARDSSTORED,
-  ALLLIKEDSTORED,
   SIGNINPATH,
   SIGNUPPATH,
   MENUITEMS,

@@ -19,8 +19,8 @@ import NotFound from '../NotFound/NotFound';
 import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
 import { CurrentUser } from '../../contexts/CurrentUser';
 import { mainApi } from '../../utils/MainApi';
-import { addCards, filterShortMovies, search } from '../../utils/utils';
-import { SAVEDMOVIESPATH, ALLCARDSSTORED, ALLLIKEDSTORED, SIGNINPATH, SIGNUPPATH } from '../../constant/constants';
+import { addCards, filterShortMovies, getAllLikedStored, getAllStoredCards, search } from '../../utils/utils';
+import { SAVEDMOVIESPATH, SIGNINPATH, SIGNUPPATH } from '../../constant/constants';
 
 function App() {
   const navigate = useNavigate();
@@ -143,9 +143,9 @@ function App() {
 
     localStorage.setItem('lastSearchText', keyword)
 
-    if (ALLCARDSSTORED !== null) {
+    if (getAllStoredCards() !== null) {
       try {
-        renderAdaptively(keyword, ALLCARDSSTORED)
+        renderAdaptively(keyword, getAllStoredCards())
       } catch (err) {
         if (err instanceof NotFoundError) {
           setIsNotFoundError(true)
@@ -180,9 +180,9 @@ function App() {
     setIsLoading(true)
     localStorage.setItem('lastSearchTextLiked', keyword)
 
-    if (ALLLIKEDSTORED !== null) {
+    if (getAllLikedStored() !== null) {
       try {
-        renderAdaptively(keyword, ALLLIKEDSTORED, setInitialLiked)
+        renderAdaptively(keyword, getAllLikedStored(), setInitialLiked)
       } catch (err) {
         if (err instanceof NotFoundError) {
           setIsNotFoundError(true)
@@ -338,6 +338,7 @@ function App() {
       .then((newMovie) => {
         const newMovies = [...likedMovies, newMovie]
         setLikedMovies(newMovies)
+        localStorage.setItem('allLikedStored', JSON.stringify(newMovies))
       })
       .catch(err => console.log(err))
   }

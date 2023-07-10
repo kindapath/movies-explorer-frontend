@@ -56,3 +56,6 @@ export const addCards = (isBigScreen, isMediumScreen) => {
     return 2
   }
 }
+
+export const getAllStoredCards = () => JSON.parse(localStorage.getItem('allCardsStored'))
+export const getAllLikedStored = () => JSON.parse(localStorage.getItem('allLikedStored'))

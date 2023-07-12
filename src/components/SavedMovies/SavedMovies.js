@@ -5,6 +5,7 @@ import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
 import Error from '../Error/Error';
+import { useEffect } from 'react';
 
 const SavedMovies = ({
   isLoading,
@@ -16,8 +17,12 @@ const SavedMovies = ({
   handleCheckClick,
   lastSearchLiked,
   isError,
-  isNotFoundError
+  isNotFoundError,
+  setIsFilterChecked
 }) => {
+  useEffect(() => {
+    setIsFilterChecked(false)
+  }, [])
 
   function renderSwitch(param) {
 

@@ -1,3 +1,5 @@
+import { MAIN_URL } from "../constant/constants";
+
 class MainApi {
   constructor({ baseUrl }) {
     this._baseUrl = baseUrl
@@ -130,5 +132,7 @@ class MainApi {
   }
 }
 export const mainApi = new MainApi({
-  baseUrl: 'https://api.zhenya.nomoredomains.rocks',
+  // baseUrl: MAIN_URL,
+  baseUrl: 'http://localhost:3000',
+
 })

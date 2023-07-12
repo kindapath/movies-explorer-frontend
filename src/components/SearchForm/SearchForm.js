@@ -4,6 +4,7 @@ import { useFormWithValidation } from '../../hooks/useForm';
 import './SearchForm.css';
 import { useEffect } from 'react';
 import { SAVEDMOVIESPATH } from '../../constant/constants';
+import { getLastSearch } from '../../utils/utils';
 
 const SearchForm = ({ handleSearch, handleSavedSearch, lastSearch }) => {
 
@@ -11,13 +12,18 @@ const SearchForm = ({ handleSearch, handleSavedSearch, lastSearch }) => {
     values,
     onChange,
     formValid,
+    resetForm
   } = useFormWithValidation()
 
   const location = useLocation()
   const savedMoviesLocation = location.pathname === SAVEDMOVIESPATH
 
   useEffect(() => {
-    savedMoviesLocation ? values.search = '' : values.search = lastSearch.text
+    if (savedMoviesLocation) {
+      resetForm({ search: '' })
+    } else {
+      resetForm({ search: getLastSearch('text') })
+    }
   }, [])
 
   function onSubmit(e) {

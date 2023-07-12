@@ -59,3 +59,37 @@ export const addCards = (isBigScreen, isMediumScreen) => {
 
 export const getAllStoredCards = () => JSON.parse(localStorage.getItem('allCardsStored'))
 export const getAllLikedStored = () => JSON.parse(localStorage.getItem('allLikedStored'))
+
+export function getLastSearch(key) {
+  switch (key) {
+    case 'text':
+      return localStorage.getItem('lastSearchText')
+
+    case 'filter':
+      return JSON.parse(localStorage.getItem('lastSearchFilter'))
+
+    case 'cards':
+      return JSON.parse(localStorage.getItem('lastSearch'))
+    default:
+      break;
+  }
+}
+
+export function checkScreenSize({
+  isBigScreen,
+  isMediumScreen,
+  array
+}) {
+  let sliced = null
+
+  // instead of movies.slice(0, 12) we can use search(movies) util function
+  // that will return an array with found results
+  if (isBigScreen) {
+    sliced = array.slice(0, 12)
+  } else if (isMediumScreen) {
+    sliced = array.slice(0, 8)
+  } else {
+    sliced = array.slice(0, 5)
+  }
+  return sliced
+}

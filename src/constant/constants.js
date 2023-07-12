@@ -33,11 +33,16 @@ const NAVLINKS = [
   }
 ]
 
+const MAIN_URL = 'https://api.zhenya.nomoredomains.rocks'
+const MOVIES_URL = 'https://api.nomoreparties.co'
+
 export {
   SAVEDMOVIESPATH,
   MOVIESPATH,
   SIGNINPATH,
   SIGNUPPATH,
   MENUITEMS,
-  NAVLINKS
+  NAVLINKS,
+  MAIN_URL,
+  MOVIES_URL
 }

@@ -19,7 +19,7 @@ import NotFound from '../NotFound/NotFound';
 import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
 import { CurrentUser } from '../../contexts/CurrentUser';
 import { mainApi } from '../../utils/MainApi';
-import { addCards, filterShortMovies, getAllLikedStored, getAllStoredCards, search } from '../../utils/utils';
+import { addCards, checkScreenSize, filterShortMovies, getAllLikedStored, getAllStoredCards, search } from '../../utils/utils';
 import { SAVEDMOVIESPATH, SIGNINPATH, SIGNUPPATH } from '../../constant/constants';
 
 function App() {
@@ -40,7 +40,7 @@ function App() {
   const [hiddenSubmit, setHiddenSubmit] = useState(true)
   const [hiddenMore, setHiddenMore] = useState(false)
 
-  const [isFilterChecked, setIsFilterChecked] = useState(false)
+  const [isFilterChecked, setIsFilterChecked] = useState(null)
 
 
   const [isNotFoundError, setIsNotFoundError] = useState(false)
@@ -54,7 +54,7 @@ function App() {
   const [lastSearch, setLastSearch] = useState({
     cards: JSON.parse(localStorage.getItem('lastSearch')) ? JSON.parse(localStorage.getItem('lastSearch')) : null,
     text: localStorage.getItem('lastSearchText') ? localStorage.getItem('lastSearchText') : null,
-    filter: JSON.parse(localStorage.getItem('lastSearchFilter')) ? JSON.parse(localStorage.getItem('lastSearchFilter')) : false,
+    filter: JSON.parse(localStorage.getItem('lastSearchFilter')) ? JSON.parse(localStorage.getItem('lastSearchFilter')) : null,
   })
 
   const [lastSearchLiked, setLastSearchLiked] = useState({
@@ -77,8 +77,12 @@ function App() {
     setRangeFrom(Number(renderedCards.length))
     setRangeTo(Number(renderedCards.length + addCards(isBigScreen, isMediumScreen)))
 
-    if (rangeTo >= initialCards.length) {
+    if ((rangeTo >= filterShortMovies(initialCards).length) && isFilterChecked === true) {
       setHiddenMore(true)
+    } else if (rangeTo >= initialCards.length) {
+      setHiddenMore(true)
+    } else {
+      setHiddenMore(false)
     }
   }, [renderedCards])
 
@@ -121,18 +125,23 @@ function App() {
     } else {
 
       if (isFilterChecked === true) {
-        setRenderedCards(filterShortMovies(renderedCards))
+        setRenderedCards(filterShortMovies(initialCards))
         JSON.stringify(localStorage.setItem('lastSearchFilter', isFilterChecked))
-      } else {
-        setRenderedCards(initialCards)
+      } else if (isFilterChecked === false) {
+        // setRenderedCards(initialCards)
+        setRenderedCards(checkScreenSize({
+          isBigScreen,
+          isMediumScreen,
+          array: initialCards
+        }))
         JSON.stringify(localStorage.setItem('lastSearchFilter', isFilterChecked))
       }
 
     }
   }, [isFilterChecked])
 
-  function handleCheckClick() {
-    setIsFilterChecked(!isFilterChecked)
+  function handleCheckClick(e) {
+    setIsFilterChecked(e.target.checked)
   }
 
   function handleSearch(keyword) {
@@ -146,6 +155,7 @@ function App() {
     if (getAllStoredCards() !== null) {
       try {
         renderAdaptively(keyword, getAllStoredCards())
+        JSON.stringify(localStorage.setItem('lastSearchFilter', isFilterChecked))
       } catch (err) {
         if (err instanceof NotFoundError) {
           setIsNotFoundError(true)
@@ -212,6 +222,7 @@ function App() {
 
   function renderAdaptively(keyword, movies, setInitialLiked) {
     setIsLoading(false)
+
 
     let sliced = null
 
@@ -292,8 +303,18 @@ function App() {
   const onLogout = () => {
     mainApi.logout()
       .then(() => {
-        localStorage.clear();
+        localStorage.clear()
+        setRenderedCards([])
+        setInitialCards([])
+        setIsFilterChecked(false)
         setIsLoggedIn(false)
+
+        setLastSearch({
+          cards: JSON.parse(localStorage.getItem('lastSearchLiked')) ? JSON.parse(localStorage.getItem('lastSearchLiked')) : null,
+          text: localStorage.getItem('lastSearchTextLiked') ? localStorage.getItem('lastSearchTextLiked') : null,
+          filter: JSON.parse(localStorage.getItem('lastSearchFilterLiked')) ? JSON.parse(localStorage.getItem('lastSearchFilterLiked')) : null,
+        })
+
         navigate('/')
       })
       .catch((err) => {

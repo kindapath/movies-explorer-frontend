@@ -7,6 +7,7 @@ import More from '../More/More';
 import Preloader from '../Preloader/Preloader';
 import Error from '../Error/Error';
 import { useEffect } from 'react';
+import { getLastSearch } from '../../utils/utils';
 
 const Movies = ({
   isLoading,
@@ -16,17 +17,16 @@ const Movies = ({
   isNotFoundError,
   onLike,
   likedMovies,
-  getLikedMovies,
   handleMore,
   isFilterChecked,
   handleCheckClick,
   setIsFilterChecked,
   lastSearch,
-  hiddenMore
+  hiddenMore,
 }) => {
 
   useEffect(() => {
-    setIsFilterChecked(lastSearch.filter)
+    setIsFilterChecked(getLastSearch('filter'))
   }, [])
 
   function renderSwitch(param) {

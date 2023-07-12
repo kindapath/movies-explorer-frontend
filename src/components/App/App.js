@@ -223,18 +223,11 @@ function App() {
   function renderAdaptively(keyword, movies, setInitialLiked) {
     setIsLoading(false)
 
-
-    let sliced = null
-
-    // instead of movies.slice(0, 12) we can use search(movies) util function
-    // that will return an array with found results
-    if (isBigScreen) {
-      sliced = search(keyword, movies, isFilterChecked, setInitialCards, setInitialLiked).slice(0, 12)
-    } else if (isMediumScreen) {
-      sliced = search(keyword, movies, isFilterChecked, setInitialCards, setInitialLiked).slice(0, 8)
-    } else {
-      sliced = search(keyword, movies, isFilterChecked, setInitialCards, setInitialLiked).slice(0, 5)
-    }
+    const sliced = checkScreenSize({
+      isBigScreen,
+      isMediumScreen,
+      array: search(keyword, movies, isFilterChecked, setInitialCards, setInitialLiked)
+    })
 
     if (savedMoviesLocation) {
       setLikedMovies(sliced)

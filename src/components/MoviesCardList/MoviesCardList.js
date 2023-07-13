@@ -3,7 +3,7 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 
 import './MoviesCardList.css';
 
-const MoviesCardList = ({ cards }) => {
+const MoviesCardList = ({ cards, onLike, likedMovies, onRemove }) => {
 
   return (
     <section className='movies-list movies__movies-list'>
@@ -13,10 +13,11 @@ const MoviesCardList = ({ cards }) => {
           return (
             <li>
               <MoviesCard
-                image={`https://api.nomoreparties.co${movie.image.url}`}
-                name={movie.nameRU}
-                duration={movie.duration}
-                trailerLink={movie.trailerLink}
+                movie={movie}
+
+                onLike={onLike}
+                onRemove={onRemove}
+                likedMovies={likedMovies}
               />
             </li>
           )

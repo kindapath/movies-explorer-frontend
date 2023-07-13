@@ -9,29 +9,96 @@ import Register from '../Register/Register';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import './App.css';
 import { moviesApi } from '../../utils/MoviesApi';
+import NotFoundError from "../../errors/NotFoundError";
 
 
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Layout from '../Layout/Layout';
 import NotFound from '../NotFound/NotFound';
 import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
 import { CurrentUser } from '../../contexts/CurrentUser';
-import Error from '../Error/Error';
 import { mainApi } from '../../utils/MainApi';
+import { addCards, checkScreenSize, filterShortMovies, getAllLikedStored, getAllStoredCards, search } from '../../utils/utils';
+import { SAVEDMOVIESPATH, SIGNINPATH, SIGNUPPATH } from '../../constant/constants';
 
 function App() {
   const navigate = useNavigate();
+  const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' });
+  const isMediumScreen = useMediaQuery({ query: '(min-width: 544px)' })
+
+  const location = useLocation()
+  const savedMoviesLocation = location.pathname === SAVEDMOVIESPATH
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
-  const [cards, setCards] = useState([])
+
+  const [renderedCards, setRenderedCards] = useState([])
   const [inputOn, setInputOn] = useState(false)
+
   const [hiddenSubmit, setHiddenSubmit] = useState(true)
+  const [hiddenMore, setHiddenMore] = useState(false)
+
+  const [isFilterChecked, setIsFilterChecked] = useState(null)
+
 
   const [isNotFoundError, setIsNotFoundError] = useState(false)
   const [isError, setIsError] = useState(false)
   const [errorApi, setErrorApi] = useState('')
+
+  const [successMsg, setSuccessMsg] = useState('')
+
+  const [likedMovies, setLikedMovies] = useState([])
+
+  const [lastSearch, setLastSearch] = useState({
+    cards: JSON.parse(localStorage.getItem('lastSearch')) ? JSON.parse(localStorage.getItem('lastSearch')) : null,
+    text: localStorage.getItem('lastSearchText') ? localStorage.getItem('lastSearchText') : null,
+    filter: JSON.parse(localStorage.getItem('lastSearchFilter')) ? JSON.parse(localStorage.getItem('lastSearchFilter')) : null,
+  })
+
+  const [lastSearchLiked, setLastSearchLiked] = useState({
+    cards: JSON.parse(localStorage.getItem('lastSearchLiked')) ? JSON.parse(localStorage.getItem('lastSearchLiked')) : null,
+    text: localStorage.getItem('lastSearchTextLiked') ? localStorage.getItem('lastSearchTextLiked') : null,
+    filter: JSON.parse(localStorage.getItem('lastSearchFilterLiked')) ? JSON.parse(localStorage.getItem('lastSearchFilterLiked')) : false,
+  })
+
+  const [rangeFrom, setRangeFrom] = useState()
+  const [rangeTo, setRangeTo] = useState()
+
+  const [initialCards, setInitialCards] = useState([])
+  const [initialLiked, setInitialLiked] = useState([])
+
+  useEffect(() => {
+    lastSearch.cards = JSON.parse(localStorage.getItem('lastSearch'))
+  }, [renderedCards])
+
+  useEffect(() => {
+    setRangeFrom(Number(renderedCards.length))
+    setRangeTo(Number(renderedCards.length + addCards(isBigScreen, isMediumScreen)))
+
+    if ((rangeTo >= filterShortMovies(initialCards).length) && isFilterChecked === true) {
+      setHiddenMore(true)
+    } else if (rangeTo >= initialCards.length) {
+      setHiddenMore(true)
+    } else {
+      setHiddenMore(false)
+    }
+  }, [renderedCards])
+
+  useEffect(() => {
+    checkToken()
+  }, [])
+
+  function getLikedMovies() {
+    mainApi.getLikedMovies()
+      .then((updatedMovies) => {
+        setLikedMovies(updatedMovies)
+        setInitialLiked(updatedMovies)
+        localStorage.setItem('allLikedStored', JSON.stringify(updatedMovies))
+      })
+      .catch(err => console.log(err))
+  }
 
   function checkToken() {
     mainApi.getUserInfo()
@@ -44,31 +111,164 @@ function App() {
       })
   }
 
-
   useEffect(() => {
-    checkToken()
-  }, [])
+    if (savedMoviesLocation) {
 
-  function handleSearch() {
+      if (isFilterChecked === true) {
+        setLikedMovies(filterShortMovies(likedMovies))
+        JSON.stringify(localStorage.setItem('lastSearchFilterLiked', isFilterChecked))
+      } else {
+        setLikedMovies(initialLiked)
+        JSON.stringify(localStorage.setItem('lastSearchFilterLiked', isFilterChecked))
+      }
+
+    } else {
+
+      if (isFilterChecked === true) {
+        setRenderedCards(filterShortMovies(initialCards))
+        JSON.stringify(localStorage.setItem('lastSearchFilter', isFilterChecked))
+      } else if (isFilterChecked === false) {
+        // setRenderedCards(initialCards)
+        setRenderedCards(checkScreenSize({
+          isBigScreen,
+          isMediumScreen,
+          array: initialCards
+        }))
+        JSON.stringify(localStorage.setItem('lastSearchFilter', isFilterChecked))
+      }
+
+    }
+  }, [isFilterChecked])
+
+  function handleCheckClick(e) {
+    setIsFilterChecked(e.target.checked)
+  }
+
+  function handleSearch(keyword) {
+    setIsError(false)
+    setIsNotFoundError(false)
     setIsLoading(true)
-    moviesApi.getMovies()
-      .then((movies) => {
-        // throw new Error()
-        setIsLoading(false)
-        setCards(movies)
-        localStorage.setItem("cards", movies)
-      })
-      .catch(() => { })
+    setHiddenMore(false)
+
+    localStorage.setItem('lastSearchText', keyword)
+
+    if (getAllStoredCards() !== null) {
+      try {
+        renderAdaptively(keyword, getAllStoredCards())
+        JSON.stringify(localStorage.setItem('lastSearchFilter', isFilterChecked))
+      } catch (err) {
+        if (err instanceof NotFoundError) {
+          setIsNotFoundError(true)
+          return
+        }
+        setIsError(true)
+      }
+
+    } else {
+      moviesApi.getMovies()
+        .then((movies) => {
+
+          localStorage.setItem('allCardsStored', JSON.stringify(movies))
+
+          renderAdaptively(keyword, movies)
+
+        })
+        .catch((err) => {
+          if (err instanceof NotFoundError) {
+            setIsNotFoundError(true)
+            return
+          }
+          setIsError(true)
+        })
+    }
+
+  }
+
+  function handleSavedSearch(keyword) {
+    setIsError(false)
+    setIsNotFoundError(false)
+    setIsLoading(true)
+    localStorage.setItem('lastSearchTextLiked', keyword)
+
+    if (getAllLikedStored() !== null) {
+      try {
+        renderAdaptively(keyword, getAllLikedStored(), setInitialLiked)
+      } catch (err) {
+        if (err instanceof NotFoundError) {
+          setIsNotFoundError(true)
+          return
+        }
+        setIsError(true)
+      }
+    } else {
+
+      mainApi.getLikedMovies()
+        .then((likedMovies) => {
+          localStorage.setItem('allLikedStored', JSON.stringify(likedMovies))
+
+          renderAdaptively(keyword, likedMovies)
+
+        })
+        .catch((err) => {
+          if (err instanceof NotFoundError) {
+            setIsNotFoundError(true)
+            return
+          }
+          setIsError(true)
+        })
+    }
+
+  }
+
+  function renderAdaptively(keyword, movies, setInitialLiked) {
+    setIsLoading(false)
+
+    const sliced = checkScreenSize({
+      isBigScreen,
+      isMediumScreen,
+      array: search(keyword, movies, isFilterChecked, setInitialCards, setInitialLiked)
+    })
+
+    if (savedMoviesLocation) {
+      setLikedMovies(sliced)
+      localStorage.setItem('lastSearchLiked', JSON.stringify(sliced))
+    } else {
+      setRenderedCards(sliced)
+      localStorage.setItem('lastSearch', JSON.stringify(sliced))
+    }
+
+  }
+
+
+
+  function handleMore() {
+
+    const slicedRange = initialCards.slice(rangeFrom, rangeTo)
+
+    const newCards = renderedCards.concat(slicedRange)
+
+    setRenderedCards(newCards)
+
   }
 
   // меняем стейт логина и переводим юзера на страницу фильмов
   const handleLogin = (userData) => {
     setIsLoggedIn(!isLoggedIn)
+    setErrorApi('')
     setCurrentUser({
-      name: userData.name, //TODO: исправить на бекенде - чтобы апи логина отдавал и name
+      name: userData.name,
       email: userData.email
     })
-    navigate('/movies')
+    getLikedMovies()
+    if (location.pathname === SIGNINPATH || location.pathname === SIGNUPPATH) {
+      navigate('/movies')
+    } else {
+      navigate(location.pathname)
+    }
+
+    if (lastSearch.cards !== null) {
+      renderAdaptively(lastSearch.text, lastSearch.cards)
+    }
   }
 
   // регистрация
@@ -96,8 +296,19 @@ function App() {
   const onLogout = () => {
     mainApi.logout()
       .then(() => {
+        localStorage.clear()
+        setRenderedCards([])
+        setInitialCards([])
+        setIsFilterChecked(false)
+        setIsLoggedIn(false)
+
+        setLastSearch({
+          cards: JSON.parse(localStorage.getItem('lastSearchLiked')) ? JSON.parse(localStorage.getItem('lastSearchLiked')) : null,
+          text: localStorage.getItem('lastSearchTextLiked') ? localStorage.getItem('lastSearchTextLiked') : null,
+          filter: JSON.parse(localStorage.getItem('lastSearchFilterLiked')) ? JSON.parse(localStorage.getItem('lastSearchFilterLiked')) : null,
+        })
+
         navigate('/')
-        console.log('logout succesfully')
       })
       .catch((err) => {
         console.log(err.message)
@@ -107,17 +318,57 @@ function App() {
   const onEditProfile = ({ email, name }) => {
     mainApi.editProfile({ email, name })
       .then((userData) => {
-        console.log(userData)
         setCurrentUser({
           name: userData.name,
           email: userData.email
         })
         setInputOn(false)
         setHiddenSubmit(true)
+        setErrorApi('')
+        setSuccessMsg('Вы успешно изменили свой профиль')
       })
       .catch((err) => {
         setErrorApi(err.message)
       })
+      .finally(() => {
+        setTimeout(() => {
+          setSuccessMsg('')
+        }, 3000);
+      })
+  }
+
+  const dislikeCard = (objectId) => {
+    mainApi.dislikeCard(objectId)
+      .then((newMovie) => {
+        const newMovies = likedMovies.filter((likedMovie) => likedMovie.movieId === newMovie.movieId ? null : likedMovie)
+        setLikedMovies(newMovies)
+        localStorage.setItem('allLikedStored', JSON.stringify(newMovies))
+      })
+      .catch(err => console.log(err))
+  }
+
+  const likeCard = (movie) => {
+    mainApi.likeCard(movie)
+      .then((newMovie) => {
+        const newMovies = [...likedMovies, newMovie]
+        setLikedMovies(newMovies)
+        localStorage.setItem('allLikedStored', JSON.stringify(newMovies))
+      })
+      .catch(err => console.log(err))
+  }
+
+
+  const onLike = (movie, objectId) => {
+    const isLiked = likedMovies.some((likedMovie) => likedMovie.movieId === movie.id);
+
+    if (isLiked) {
+      dislikeCard(objectId)
+    } else {
+      likeCard(movie)
+    }
+  }
+  const onRemove = (objectId) => {
+    dislikeCard(objectId)
   }
 
   return (
@@ -142,9 +393,23 @@ function App() {
                   isLoggedIn={isLoggedIn}
                   isLoading={isLoading}
                   handleSearch={handleSearch}
-                  cards={cards}
+                  cards={renderedCards}
                   isNotFoundError={isNotFoundError}
                   isError={isError}
+
+                  isFilterChecked={isFilterChecked}
+                  handleCheckClick={handleCheckClick}
+
+                  onLike={onLike}
+                  likedMovies={likedMovies}
+                  getLikedMovies={getLikedMovies}
+
+                  handleMore={handleMore}
+                  hiddenMore={hiddenMore}
+
+                  setIsFilterChecked={setIsFilterChecked}
+
+                  lastSearch={lastSearch}
                 />
               }
             />
@@ -155,7 +420,19 @@ function App() {
                 <ProtectedRouteElement
                   element={SavedMovies}
                   isLoggedIn={isLoggedIn}
-                  isLoading={isLoading} />
+                  isLoading={isLoading}
+                  likedMovies={likedMovies}
+                  getLikedMovies={getLikedMovies}
+                  onRemove={onRemove}
+                  handleSavedSearch={handleSavedSearch}
+                  isFilterChecked={isFilterChecked}
+                  handleCheckClick={handleCheckClick}
+                  setIsFilterChecked={setIsFilterChecked}
+
+                  lastSearchLiked={lastSearchLiked}
+                  isError={isError}
+                  isNotFoundError={isNotFoundError}
+                />
               }
             />
 
@@ -172,6 +449,7 @@ function App() {
                   setInputOn={setInputOn}
                   setHiddenSubmit={setHiddenSubmit}
                   onLogout={onLogout}
+                  successMsg={successMsg}
                 />
               }
             />

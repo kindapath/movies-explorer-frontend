@@ -1,41 +1,59 @@
 // компонент одной карточки фильма
 import './MoviesCard.css';
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { MOVIESPATH, SAVEDMOVIESPATH } from '../../constant/constants';
+import { toHoursAndMinutes } from '../../utils/utils';
 
 
-const MoviesCard = ({ image, name, duration, trailerLink }) => {
-  //temporary solution
-  const [isLiked, setIsLiked] = useState(false)
+const MoviesCard = ({ onLike, onRemove, movie, likedMovies }) => {
+  const isLiked = likedMovies.some((likedMovie) => {
+    return likedMovie.movieId === movie.id
+  });
+
+  const foundMovie = likedMovies.find((likedMovie) => likedMovie.movieId === movie.id)
+
   const location = useLocation()
+  const savedMoviesLocation = location.pathname === SAVEDMOVIESPATH
+  const moviesLocation = location.pathname === MOVIESPATH
 
-  function toHoursAndMinutes(totalMinutes) {
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
 
-    return `${hours} ч${minutes > 0 ? ` ${minutes} мин` : ''}`;
+  function handleLike(e) {
+    e.preventDefault()
+    let objectId = null
+    if (foundMovie !== undefined) {
+      objectId = foundMovie._id
+    }
+    onLike(movie, objectId)
   }
 
-  console.log();
+  function handleRemove(e) {
+    e.preventDefault()
+
+    onRemove(movie._id)
+  }
 
   return (
     <article className='card'>
-      <Link to={trailerLink} target='_blank'>
-        <img className='card__image' src={image} alt='Фото карточки' />
+      <Link to={movie.trailerLink} target='_blank'>
+        <img
+          className='card__image'
+          src={savedMoviesLocation ? movie.image : `https://api.nomoreparties.co${movie.image.url}`}
+          alt='Фото карточки'
+        />
       </Link>
 
 
       <div className='card__row'>
 
         <div className='card__column'>
-          <h2 className='card__heading'>{name}</h2>
-          <p className='card__time'>{toHoursAndMinutes(duration)}</p>
+          <h2 className='card__heading'>{movie.nameRU}</h2>
+          <p className='card__time'>{toHoursAndMinutes(movie.duration)}</p>
         </div>
 
         <div className='card__column card__column_like'>
-          {location.pathname === '/movies' &&
-            <button className="card__like" onClick={() => { setIsLiked(!isLiked) }}>
+          {moviesLocation &&
+            <button className="card__like" onClick={handleLike}>
               <svg
                 className={`card__like-icon ${isLiked ? 'card__like-icon_liked' : ''}`}
                 viewBox="0 0 14 12"
@@ -45,8 +63,8 @@ const MoviesCard = ({ image, name, duration, trailerLink }) => {
             </button>
           }
 
-          {location.pathname === '/saved-movies' &&
-            <button className="card__remove" onClick={() => { setIsLiked(!isLiked) }}>
+          {savedMoviesLocation &&
+            <button className="card__remove" onClick={handleRemove}>
               <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M5.06077 3.8822L7.30003 1.64294L6.23937 0.582275L4.00011 2.82154L1.76097 0.582391L0.700309 1.64305L2.93945 3.8822L0.58252 6.23913L1.64318 7.29979L4.00011 4.94286L6.35716 7.29991L7.41782 6.23925L5.06077 3.8822Z" fill="white" />
               </svg>

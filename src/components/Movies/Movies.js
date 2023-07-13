@@ -6,14 +6,28 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import More from '../More/More';
 import Preloader from '../Preloader/Preloader';
 import Error from '../Error/Error';
+import { useEffect } from 'react';
+import { getLastSearch } from '../../utils/utils';
 
 const Movies = ({
   isLoading,
   handleSearch,
   cards,
   isError,
-  isNotFoundError
+  isNotFoundError,
+  onLike,
+  likedMovies,
+  handleMore,
+  isFilterChecked,
+  handleCheckClick,
+  setIsFilterChecked,
+  lastSearch,
+  hiddenMore,
 }) => {
+
+  useEffect(() => {
+    setIsFilterChecked(getLastSearch('filter'))
+  }, [])
 
   function renderSwitch(param) {
 
@@ -30,8 +44,8 @@ const Movies = ({
       default:
         return (
           <>
-            <MoviesCardList cards={cards} />
-            <More />
+            <MoviesCardList likedMovies={likedMovies} onLike={onLike} cards={cards} />
+            <More hiddenMore={hiddenMore} handleMore={handleMore} />
           </>
         );
     }
@@ -39,8 +53,8 @@ const Movies = ({
 
   return (
     <main className='movies'>
-      <SearchForm handleSearch={handleSearch} />
-      <FilterCheckbox />
+      <SearchForm handleSearch={handleSearch} lastSearch={lastSearch} />
+      <FilterCheckbox isFilterChecked={isFilterChecked} handleCheckClick={handleCheckClick} />
 
 
       {
